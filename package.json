@@ -1,0 +1,15 @@
+{
+  "dependencies": {
+    "@chakra-ui/react": "^2.8.1",
+    "@emotion/react": "^11",
+    "@emotion/styled": "^11",
+    "axios": "^1.6.0",
+    "crypto-js": "^4.2.0",
+    "framer-motion": "^6",
+    "react-hook-form": "^7.48.1",
+    "react-query": "^3.39.3"
+  },
+  "devDependencies": {
+    "@types/crypto-js": "^4.1.3"
+  }
+}
