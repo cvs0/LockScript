@@ -1,0 +1,307 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Fastify Zod Test Server",
+    "description": "Test Server for Fastify Zod",
+    "version": "0.0.0"
+  },
+  "components": {
+    "schemas": {
+      "Schema_TodoState": {
+        "type": "string",
+        "enum": [
+          "todo",
+          "in progress",
+          "done"
+        ]
+      },
+      "Schema_TodoItem": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/Schema_TodoItemId_id"
+          },
+          "label": {
+            "$ref": "#/components/schemas/Schema_TodoItem_label"
+          },
+          "dueDateMs": {
+            "$ref": "#/components/schemas/Schema_TodoItem_dueDateMs"
+          },
+          "state": {
+            "$ref": "#/components/schemas/Schema_TodoState"
+          }
+        },
+        "required": [
+          "id",
+          "label",
+          "state"
+        ],
+        "additionalProperties": false
+      },
+      "Schema_TodoItemNotFoundError": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/Schema_TodoItemId_id"
+          },
+          "message": {
+            "$ref": "#/components/schemas/Schema_TodoItemNotFoundError_message"
+          }
+        },
+        "required": [
+          "id",
+          "message"
+        ],
+        "additionalProperties": false
+      },
+      "Schema_TodoItems": {
+        "type": "object",
+        "properties": {
+          "todoItems": {
+            "$ref": "#/components/schemas/Schema_TodoItems_todoItems"
+          }
+        },
+        "required": [
+          "todoItems"
+        ],
+        "additionalProperties": false
+      },
+      "Schema_TodoItemsGroupedByStatus": {
+        "type": "object",
+        "properties": {
+          "todo": {
+            "$ref": "#/components/schemas/Schema_TodoItemsGroupedByStatus_todo"
+          },
+          "inProgress": {
+            "$ref": "#/components/schemas/Schema_TodoItemsGroupedByStatus_inProgress"
+          },
+          "done": {
+            "$ref": "#/components/schemas/Schema_TodoItemsGroupedByStatus_done"
+          }
+        },
+        "required": [
+          "todo",
+          "inProgress",
+          "done"
+        ],
+        "additionalProperties": false
+      },
+      "Schema_FortyTwo": {
+        "type": "number",
+        "enum": [
+          42
+        ]
+      },
+      "Schema_TodoItemId_id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "Schema_TodoItem_label": {
+        "type": "string"
+      },
+      "Schema_TodoItem_dueDateMs": {
+        "type": "integer",
+        "minimum": 0
+      },
+      "Schema_TodoItemNotFoundError_message": {
+        "type": "string",
+        "enum": [
+          "item not found"
+        ]
+      },
+      "Schema_TodoItems_todoItems": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Schema_TodoItem"
+        }
+      },
+      "Schema_TodoItemsGroupedByStatus_todo": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Schema_TodoItem"
+        }
+      },
+      "Schema_TodoItemsGroupedByStatus_inProgress": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Schema_TodoItem"
+        }
+      },
+      "Schema_TodoItemsGroupedByStatus_done": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Schema_TodoItem"
+        }
+      }
+    }
+  },
+  "paths": {
+    "/documentation_transformed/json": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "Default Response"
+          }
+        }
+      }
+    },
+    "/documentation_transformed/yaml": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "Default Response"
+          }
+        }
+      }
+    },
+    "/item": {
+      "get": {
+        "operationId": "getTodoItems",
+        "responses": {
+          "200": {
+            "description": "The list of Todo Items",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Schema_TodoItems",
+                  "description": "The list of Todo Items"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "postTodoItem",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Schema_TodoItem"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Schema_TodoItems"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/item/grouped-by-status": {
+      "get": {
+        "operationId": "getTodoItemsGroupedByStatus",
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Schema_TodoItemsGroupedByStatus"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/item/{id}": {
+      "get": {
+        "operationId": "getTodoItem",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "in": "path",
+            "name": "id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Schema_TodoItem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Schema_TodoItemNotFoundError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "operationId": "putTodoItem",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Schema_TodoItem"
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "in": "path",
+            "name": "id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Schema_TodoItem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/42": {
+      "get": {
+        "operationId": "getFortyTwo",
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Schema_FortyTwo"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

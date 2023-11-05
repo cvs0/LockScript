@@ -1,0 +1,9 @@
+export declare const stringifyPath: (path: string[]) => string;
+export declare const equalPath: (a: string[], b: string[]) => boolean;
+export declare const getChildPath: <T extends string>(path: T[], ...childPath: T[]) => T[];
+export declare const getAtPathSafe: (obj: unknown, path: string[]) => [valueFound: boolean, value: unknown];
+export declare const getAtPath: (obj: unknown, path: string[]) => unknown;
+export declare const setAtPath: (obj: unknown, path: string[], value: unknown) => void;
+export declare const deleteAtPath: (obj: unknown, path: string[]) => void;
+export declare const matchPathPrefix: (prefixPath: readonly string[], path: string[]) => boolean;
+export declare const replacePathPrefix: <T extends string>(prevPrefixPath: T[], nextPrefixPath: T[], path: T[]) => T[];

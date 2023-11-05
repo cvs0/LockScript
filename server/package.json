@@ -5,6 +5,9 @@
   "repository": "https://github.com/cvs0/LockScript",
   "author": "cvs0",
   "license": "MIT",
+  "scripts": {
+    "dev": "tsnd --exit-child --transpile-only src/main.ts"
+  },
   "dependencies": {
     "@chakra-ui/react": "^2.8.1",
     "@emotion/react": "^11",

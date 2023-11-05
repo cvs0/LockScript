@@ -1,0 +1,41 @@
+{
+  "name": "json-schema-resolver",
+  "version": "2.0.0",
+  "description": "Resolve all your $refs",
+  "main": "ref-resolver.js",
+  "scripts": {
+    "lint": "standard",
+    "lint:fix": "standard --fix",
+    "test": "tap test/**/*.test.js"
+  },
+  "engines": {
+    "node": ">=10"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Eomm/json-schema-resolver.git"
+  },
+  "author": "Manuel Spigolon <behemoth89@gmail.com> (https://github.com/Eomm)",
+  "funding": "https://github.com/Eomm/json-schema-resolver?sponsor=1",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Eomm/json-schema-resolver/issues"
+  },
+  "homepage": "https://github.com/Eomm/json-schema-resolver#readme",
+  "devDependencies": {
+    "standard": "^17.0.0",
+    "tap": "^16.3.0"
+  },
+  "dependencies": {
+    "debug": "^4.1.1",
+    "rfdc": "^1.1.4",
+    "uri-js": "^4.2.2"
+  },
+  "keywords": [
+    "json",
+    "schema",
+    "json-schema",
+    "ref",
+    "$ref"
+  ]
+}
