@@ -5,6 +5,8 @@ import fs from 'fs';
 import path from 'path';
 import { CORS_ORIGIN } from "../constants";
 import cookie from "@fastify/cookie";
+import vaultRoutes from "../modules/vault/vault.route";
+import userRoutes from "../modules/user/user.routes";
 
 function createServer() {
     const app = fastify()
@@ -48,7 +50,10 @@ function createServer() {
         } catch(e) {
             return reply.send(e);
         }
-    })
+    });
+
+    app.register(userRoutes, {prefix: 'api/users'});
+    app.register(vaultRoutes, {prefix: 'api/vault'})
 
     return app;
 }
