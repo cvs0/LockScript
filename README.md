@@ -2,7 +2,7 @@
 
 LockScript is an advanced, server-client password manager developed with cutting-edge technologies, including Next.js, React.js, Node.js, Fastify, and TypeScript.
 
-# Table of Contents
+## Table of Contents
 - ![Features](#features)
 - ![Getting Started](#getting-started)
 - ![Database Setup](#database-setup)
