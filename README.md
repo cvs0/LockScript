@@ -10,6 +10,7 @@ LockScript is an advanced, server-client password manager developed with cutting
 * ![Pull Request Requirements](#pull-request-requirements)
 * ![Roadmap](#roadmap)
 * ![FAQ](#frequently-asked-questions-faq)
+* ![Media](#media)
 * ![License](#license)
 * ![Support](#support)
 
@@ -103,6 +104,12 @@ A: Absolutely! LockScript is designed for both personal and professional use, pr
 
 #### Q: How do I set up LockScript?
 A: You need to regenerate the `public.key` and `private.key` using ![this site](https://travistidwell.com/jsencrypt/demo/) and update all instances of the `secure: false` property in the `user.controller.ts` file to `secure: true` (only if you are using TLS).
+
+## Media
+![Login Page UI](media/login-page-ui.png)
+![Registration Page UI](media/registration-page-ui.png)
+![Password Manager UI](media/password-manager-ui.png)
+![Database Encryption](media/database-encryption.png)
 
 ## License
 
