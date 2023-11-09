@@ -1,14 +1,14 @@
 import axios from "axios";
 
-const userBase = `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/users`
+const userBase = `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/users`;
 
 export function registerUser(payload: {
-    hashedPassword: string,
-    email: string,
-})  {
+    hashedPassword: string;
+    email: string;
+  }) {
     return axios
-    .post<{ salt: string; vault: string }>(userBase, payload, {
+      .post<{ salt: string; vault: string }>(userBase, payload, {
         withCredentials: true,
-    })
-    .then((res) => res.data);
-}
+      })
+      .then((res) => res.data);
+  }

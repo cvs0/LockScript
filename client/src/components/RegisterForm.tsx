@@ -1,11 +1,19 @@
-import { FormControl, FormErrorMessage, FormLabel, Heading, Input } from "@chakra-ui/react";
+import { Button, FormControl, FormErrorMessage, FormLabel, Heading, Input } from "@chakra-ui/react";
 import FormWrapper from "./FormWrapper";
 import { useForm } from "react-hook-form";
-import { hashPassword } from "../crypto";
+import { generateVaultKey, hashPassword } from "../crypto";
 import { useMutation } from "react-query";
 import { registerUser } from "../api";
+import { Dispatch, SetStateAction } from "react";
+import { VaultItem } from "../pages";
 
-function RegisterForm() {
+function RegisterForm({
+    setVaultKey,
+    setStep,
+}:{
+    setVaultKey: Dispatch<SetStateAction<string>>;
+    setStep: Dispatch<SetStateAction<'login' | 'register' | 'vault'>>;
+}) {
 
     const {
         handleSubmit,
@@ -19,18 +27,33 @@ function RegisterForm() {
         onSuccess: ({salt, vault}) => {
             const hashedPassword = getValues("hashedPassword");
             const email = getValues("email");
-            const vaultKey = 
+            const vaultKey = generateVaultKey({
+                hashedPassword, email, salt
+            });
+
+            window.sessionStorage.setItem("vk", vaultKey);
+
+            setVaultKey(vaultKey);
+
+            window.sessionStorage.setItem("vault", '');
+
+            setStep('vault');
         }
     });
 
     return (
         <FormWrapper
           onSubmit={handleSubmit(() => {
+            const email = getValues("email");
             const password = getValues("password");
             const hashedPassword = hashPassword(password);
 
             setValue("hashedPassword", hashedPassword);
 
+            mutation.mutate({
+                email,
+                hashedPassword,
+            });
           })}
         >
             <Heading>Register</Heading>
@@ -66,6 +89,10 @@ function RegisterForm() {
                     {errors.email && errors.email.message}
                 </FormErrorMessage>
             </FormControl>
+
+            <Button type="submit">
+                Register
+            </Button>
         </FormWrapper>
     );
 }

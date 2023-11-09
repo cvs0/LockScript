@@ -52,8 +52,8 @@ function createServer() {
         }
     });
 
-    app.register(userRoutes, {prefix: 'api/users'});
-    app.register(vaultRoutes, {prefix: 'api/vault'})
+    app.register(userRoutes, { prefix: "api/users" });
+    app.register(vaultRoutes, { prefix: "api/vault" });
 
     return app;
 }
