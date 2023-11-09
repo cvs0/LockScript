@@ -95,7 +95,7 @@ function LoginForm({
                 </FormErrorMessage>
             </FormControl>
 
-            <Button type="submit">
+            <Button mt="4" type="submit">
                 Login
             </Button>
         </FormWrapper>

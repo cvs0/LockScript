@@ -90,7 +90,7 @@ function RegisterForm({
                 </FormErrorMessage>
             </FormControl>
 
-            <Button type="submit">
+            <Button mt="4" type="submit">
                 Register
             </Button>
         </FormWrapper>
