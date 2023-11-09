@@ -23,14 +23,18 @@ async function genHash(password: string) {
   return argon2.hash(password);
 }
 
-export async function findUserByEmailAndPassword({ email, hashedPassword }:{
+export async function findUserByEmailAndPassword({
+  email,
+  hashedPassword,
+}: {
   email: string;
   hashedPassword: string;
 }) {
   const user = await UserModel.findOne({ email });
+
   const hash = await genHash(hashedPassword);
 
-  if(!user || !argon2.verify(user.password, hash)) {
+  if (!user || !argon2.verify(user.password, hash)) {
     return null;
   }
 

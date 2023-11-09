@@ -40,33 +40,36 @@ export async function registerUserHandler(
     }
 }
 
-export async function loginHandler(request: FastifyRequest<{
-    Body: Parameters<typeof createUser>[number];
-}>, reply: FastifyReply) {
+export async function loginHandler(
+    request: FastifyRequest<{
+      Body: Parameters<typeof createUser>[number];
+    }>,
+    reply: FastifyReply
+  ) {
     const user = await findUserByEmailAndPassword(request.body);
-
-    if(!user) {
-        return reply.status(401).send({
-            message: "Invalid email or password",
-        });
+  
+    if (!user) {
+      return reply.status(401).send({
+        message: "Invalid email or password",
+      });
     }
-    
+  
     const vault = await findVaultByUser(user._id.toString());
-
+  
     const accessToken = await reply.jwtSign({
-        _id: user._id,
-        email: user.email,
+      _id: user._id,
+      email: user.email,
     });
-
+  
     reply.setCookie("token", accessToken, {
-        domain: COOKIE_DOMAIN,
-        path: '/',
-
-        // It is false because we are not using TLS in development. This MUST be true in production.
-        secure: false,
-        httpOnly: true,
-        sameSite: false,
+      domain: COOKIE_DOMAIN,
+      path: "/",
+      secure: false,
+      httpOnly: true,
+      sameSite: false,
     });
-
-    return reply.code(200).send({ accessToken, vault: vault?.data, salt: vault?.salt })
-}
+  
+    return reply
+      .code(200)
+      .send({ accessToken, vault: vault?.data, salt: vault?.salt });
+  }
