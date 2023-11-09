@@ -10,7 +10,7 @@ import Vault from '../components/Vault';
 
 function Home() {
 
-  const [step, setStep] = useState<'login' | 'register' | 'vault'>('login');
+  const [step, setStep] = useState<'login' | 'register' | 'vault'>('register');
   return (
     <div className={styles.container}>
       <Head>
