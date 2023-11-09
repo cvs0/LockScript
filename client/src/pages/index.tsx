@@ -19,7 +19,7 @@ function Home() {
         <link rel="icon" href="/favicone.ico" />
       </Head>
 
-      <main>
+      <main className={styles.main}>
         {step === "register" && <RegisterForm />}
         {step === "login" && <LoginForm />}
         {step === "vault" && <Vault />}
