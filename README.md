@@ -5,8 +5,11 @@ LockScript is an advanced, server-client password manager developed with cutting
 # Table of Contents
 * ![Features](#features)
 * ![Getting Started](#getting-started)
+* ![Database Setup](#database-setup)
 * ![Contributing](#contributing)
 * ![Pull Request Requirements](#pull-request-requirements)
+* ![Roadmap](#roadmap)
+* ![FAQ](#frequently-asked-questions-faq)
 * ![License](#license)
 * ![Support](#support)
 
