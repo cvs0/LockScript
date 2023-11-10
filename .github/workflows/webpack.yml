@@ -25,5 +25,4 @@ jobs:
     - name: Build
       run: |
         cd server
-        npm install
         npx webpack
