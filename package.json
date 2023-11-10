@@ -7,7 +7,8 @@
     "crypto-js": "^4.2.0",
     "framer-motion": "^6",
     "react-hook-form": "^7.48.1",
-    "react-query": "^3.39.3"
+    "react-query": "^3.39.3",
+    "webpack": "^5.89.0"
   },
   "devDependencies": {
     "@types/crypto-js": "^4.1.3"
