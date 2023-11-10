@@ -3,11 +3,12 @@ import { FaCog, FaSignOutAlt, FaSync, FaTimes, FaUser } from "react-icons/fa";
 import { useFieldArray, useForm } from "react-hook-form";
 import { VaultItem } from "../pages";
 import FormWrapper from "./FormWrapper";
-import { Avatar, Box, Button, FormControl, FormLabel, Input, Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react";
+import { Avatar, Box, Button, Drawer, DrawerBody, DrawerContent, DrawerHeader, DrawerOverlay, FormControl, FormLabel, Input, Link, Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react";
 import { encryptVault } from "../crypto";
 import { useMutation } from "react-query";
 import { saveVault } from "../api";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 
 function generateRandomPassword() {
     const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -47,6 +48,7 @@ function Vault({
     });
 
     const [showPasswords, setShowPasswords] = useState(false);
+    const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
     const mutation = useMutation(saveVault);
     
@@ -77,23 +79,45 @@ function Vault({
         })}>
             <Box position="absolute" top="4" right="4" display="flex" alignItems="center">
                 <Menu>
-                    <MenuButton as={Button} bg="transparent">
+                <MenuButton as={Button} bg="transparent">
                     <Avatar size="sm" icon={<FaUser />} />
-                    </MenuButton>
-                    <MenuList>
+                </MenuButton>
+                <MenuList>
                     <MenuItem>
-                        <Button leftIcon={<FaCog />} variant="ghost">
+                    <Button
+                        leftIcon={<FaCog />}
+                        variant="ghost"
+                        onClick={() => setIsSettingsOpen(true)}
+                    >
                         Settings
-                        </Button>
+                    </Button>
                     </MenuItem>
                     <MenuItem>
-                        <Button leftIcon={<FaSignOutAlt />} variant="ghost" onClick={() => handleLogout()}>
+                    <Button
+                        leftIcon={<FaSignOutAlt />}
+                        variant="ghost"
+                        onClick={() => handleLogout()}
+                    >
                         Log Out
-                        </Button>
+                    </Button>
                     </MenuItem>
-                    </MenuList>
+                </MenuList>
                 </Menu>
             </Box>
+
+            <Drawer isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} placement="right">
+                <DrawerOverlay />
+                <DrawerContent>
+                <DrawerHeader>Settings</DrawerHeader>
+                <DrawerBody>
+                    {/* Content for your settings goes here */}
+                    {/* You can include your Settings component or any other settings content */}
+                    <Link href="/settings">
+                    <a>Settings Page</a>
+                    </Link>
+                </DrawerBody>
+                </DrawerContent>
+            </Drawer>
             {fields.map((field, index) => {
                 return (
                     <Box mt="4" mb="4" display="flex" key={field.id} alignItems="flex-end">
