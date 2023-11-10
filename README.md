@@ -113,8 +113,8 @@ A: You need to regenerate the `public.key` and `private.key` using [this site](h
 
 ## License
 
-LockScript is licensed under the ![MIT License](https://github.com/cvs0/LockScript/blob/main/LICENSE), ensuring open collaboration and flexibility.
+LockScript is licensed under the [MIT License](https://github.com/cvs0/LockScript/blob/main/LICENSE), ensuring open collaboration and flexibility.
 
 ## Support
 
-If you encounter any issues or have questions, feel free to ![open an issue](http://github.com/cvs0/LockScript/issues) on the repository.
+If you encounter any issues or have questions, feel free to [open an issue](http://github.com/cvs0/LockScript/issues) on the repository.
