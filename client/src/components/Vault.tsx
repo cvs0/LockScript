@@ -3,7 +3,7 @@ import { FaCog, FaSignOutAlt, FaSync, FaTimes, FaUser } from "react-icons/fa";
 import { useFieldArray, useForm } from "react-hook-form";
 import { VaultItem } from "../pages";
 import FormWrapper from "./FormWrapper";
-import { Avatar, Box, Button, Drawer, DrawerBody, DrawerContent, DrawerHeader, DrawerOverlay, FormControl, FormLabel, Input, Link, Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react";
+import { Avatar, Box, Button, Drawer, DrawerBody, DrawerContent, DrawerHeader, DrawerOverlay, FormControl, FormLabel, Input, Link, Menu, MenuButton, MenuItem, MenuList, Switch } from "@chakra-ui/react";
 import { encryptVault } from "../crypto";
 import { useMutation } from "react-query";
 import { saveVault } from "../api";
@@ -49,6 +49,7 @@ function Vault({
 
     const [showPasswords, setShowPasswords] = useState(false);
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+    const [darkMode, setDarkMode] = useState(false);
 
     const mutation = useMutation(saveVault);
     
@@ -110,11 +111,14 @@ function Vault({
                 <DrawerContent>
                 <DrawerHeader>Settings</DrawerHeader>
                 <DrawerBody>
-                    {/* Content for your settings goes here */}
-                    {/* You can include your Settings component or any other settings content */}
-                    <Link href="/settings">
-                    <a>Settings Page</a>
-                    </Link>
+                    {/* Dark Mode Switch */}
+                    <Switch
+                    mb="2"
+                    isChecked={darkMode}
+                    onChange={() => setDarkMode(!darkMode)}
+                    >
+                    Dark Mode
+                    </Switch>
                 </DrawerBody>
                 </DrawerContent>
             </Drawer>
