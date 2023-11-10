@@ -1,13 +1,13 @@
 /* eslint-disable react/jsx-no-undef */
-import { FaSync, FaTimes } from "react-icons/fa";
+import { FaCog, FaSignOutAlt, FaSync, FaTimes, FaUser } from "react-icons/fa";
 import { useFieldArray, useForm } from "react-hook-form";
 import { VaultItem } from "../pages";
 import FormWrapper from "./FormWrapper";
-import { Box, Button, FormControl, FormLabel, Input } from "@chakra-ui/react";
+import { Avatar, Box, Button, FormControl, FormLabel, Input, Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react";
 import { encryptVault } from "../crypto";
 import { useMutation } from "react-query";
 import { saveVault } from "../api";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function generateRandomPassword() {
     const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -30,7 +30,7 @@ function generateRandomPassword() {
 
 function Vault({
     vault = [],
-    vaultKey = ""
+    vaultKey = "",
 }: {
     vault: VaultItem[];
     vaultKey: string;
@@ -55,6 +55,11 @@ function Vault({
         setValue(`vault.${index}.password`, newPassword);
     };
 
+    const handleLogout = () => {
+        window.sessionStorage.clear();
+        window.location.reload();
+    };
+
     return (
         <FormWrapper onSubmit={handleSubmit(({ vault }) => {
             console.log({ vault });
@@ -70,6 +75,25 @@ function Vault({
                 encryptedVault,
             });
         })}>
+            <Box position="absolute" top="4" right="4" display="flex" alignItems="center">
+                <Menu>
+                    <MenuButton as={Button} bg="transparent">
+                    <Avatar size="sm" icon={<FaUser />} />
+                    </MenuButton>
+                    <MenuList>
+                    <MenuItem>
+                        <Button leftIcon={<FaCog />} variant="ghost">
+                        Settings
+                        </Button>
+                    </MenuItem>
+                    <MenuItem>
+                        <Button leftIcon={<FaSignOutAlt />} variant="ghost" onClick={() => handleLogout()}>
+                        Log Out
+                        </Button>
+                    </MenuItem>
+                    </MenuList>
+                </Menu>
+            </Box>
             {fields.map((field, index) => {
                 return (
                     <Box mt="4" mb="4" display="flex" key={field.id} alignItems="flex-end">
