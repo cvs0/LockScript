@@ -32,9 +32,7 @@ export async function findUserByEmailAndPassword({
 }) {
   const user = await UserModel.findOne({ email });
 
-  const hash = await genHash(hashedPassword);
-
-  if (!user || !argon2.verify(user.password, hash)) {
+  if (!user || !(await argon2.verify(user.password, hashedPassword))) {
     return null;
   }
 

@@ -41,11 +41,11 @@ export async function registerUserHandler(
 }
 
 export async function loginHandler(
-    request: FastifyRequest<{
-      Body: Parameters<typeof createUser>[number];
-    }>,
-    reply: FastifyReply
-  ) {
+  request: FastifyRequest<{
+    Body: Parameters<typeof createUser>[number];
+  }>,
+  reply: FastifyReply
+) {
     const user = await findUserByEmailAndPassword(request.body);
   
     if (!user) {
