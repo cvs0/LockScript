@@ -3,12 +3,52 @@ import { FaCog, FaSignOutAlt, FaSync, FaTimes, FaUser } from "react-icons/fa";
 import { useFieldArray, useForm } from "react-hook-form";
 import { VaultItem } from "../pages";
 import FormWrapper from "./FormWrapper";
-import { Avatar, Box, Button, Drawer, DrawerBody, DrawerContent, DrawerHeader, DrawerOverlay, FormControl, FormLabel, Input, Link, Menu, MenuButton, MenuItem, MenuList, Switch } from "@chakra-ui/react";
+import { Avatar, Box, Button, Drawer, DrawerBody, DrawerContent, DrawerHeader, DrawerOverlay, FormControl, FormLabel, Input, Link, Menu, MenuButton, MenuItem, MenuList, Select, Switch } from "@chakra-ui/react";
 import { encryptVault } from "../crypto";
 import { useMutation } from "react-query";
 import { saveVault } from "../api";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+
+interface CountryDropdownProps {
+    onSelect: (selectedCountry: string) => void;
+  }
+
+  function CountryDropdown({ onSelect }: CountryDropdownProps) {
+    const [countries, setCountries] = useState<string[]>([]);
+    const [searchTerm, setSearchTerm] = useState<string>('');
+  
+    useEffect(() => {
+      const fetchCountries = async () => {
+        try {
+          const response = await fetch('https://restcountries.com/v3.1/all');
+          const data = await response.json();
+          const countryList = data.map((country: { name: { common: string } }) => country.name.common);
+          setCountries(countryList);
+        } catch (error) {
+          console.error('Error fetching countries:', error);
+        }
+      };
+  
+      fetchCountries();
+    }, []);
+  
+    const filteredCountries = countries.filter(country =>
+      country.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  
+    const sortedCountries = filteredCountries.sort();
+  
+    return (
+      <Select placeholder="Select a country" onChange={(e) => onSelect(e.target.value)}>
+        {sortedCountries.map((country, index) => (
+          <option key={index} value={country}>
+            {country}
+          </option>
+        ))}
+      </Select>
+    );
+  }
 
 function generateRandomPassword() {
     const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -50,6 +90,8 @@ function Vault({
     const [showPasswords, setShowPasswords] = useState(false);
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     const [darkMode, setDarkMode] = useState(false);
+    const [location, setLocation] = useState("");
+    const [notification, setNotification] = useState(false);
 
     const mutation = useMutation(saveVault);
     
@@ -83,6 +125,7 @@ function Vault({
                 <MenuButton as={Button} bg="transparent">
                     <Avatar size="sm" icon={<FaUser />} />
                 </MenuButton>
+
                 <MenuList>
                     <MenuItem>
                     <Button
@@ -108,19 +151,45 @@ function Vault({
 
             <Drawer isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} placement="right">
                 <DrawerOverlay />
-                <DrawerContent>
-                <DrawerHeader>Settings</DrawerHeader>
-                <DrawerBody>
-                    {/* Dark Mode Switch */}
-                    <Switch
-                    mb="2"
-                    isChecked={darkMode}
-                    onChange={() => setDarkMode(!darkMode)}
-                    >
-                    Dark Mode
-                    </Switch>
-                </DrawerBody>
-                </DrawerContent>
+                    <DrawerContent>
+                        <DrawerHeader>Settings</DrawerHeader>
+                        <DrawerBody>
+                            {/* Dark Mode Switch */}
+                            <FormControl display="flex" alignItems="center" mb="4">
+                                <FormLabel htmlFor="darkMode" mb="0">
+                                    Dark Mode
+                                </FormLabel>
+                                <Switch
+                                    id="darkMode"
+                                    isChecked={darkMode}
+                                    onChange={() => setDarkMode(!darkMode)}
+                                />
+                            </FormControl>
+
+                            {/* Notification Switch */}
+                            <FormControl display="flex" alignItems="center" mb="4">
+                                <FormLabel htmlFor="notification" mb="0">
+                                    Notifications
+                                </FormLabel>
+                                <Switch
+                                    id="notification"
+                                    isChecked={notification}
+                                    onChange={() => setNotification(!notification)}
+                                />
+                            </FormControl>
+
+                            {/* Country Dropdown */}
+                            <FormControl mb="4">
+                                <FormLabel htmlFor="country">Country</FormLabel>
+                                <CountryDropdown onSelect={(selectedCountry) => setLocation(selectedCountry)} />
+                            </FormControl>
+
+                            {/* Link to Settings Page */}
+                            <Link href="/settings">
+                                <a>Settings Page</a>
+                            </Link>
+                        </DrawerBody>
+                    </DrawerContent>
             </Drawer>
             {fields.map((field, index) => {
                 return (
