@@ -56,7 +56,7 @@ Visit `http://localhost:3000` in your browser to access the LockScript client.
 ## Database Setup
 
 1. **Download MongoDB:**
-    * ![Downlaod MongoDB](https://www.mongodb.com/try/download/community).
+    * [Downlaod MongoDB](https://www.mongodb.com/try/download/community).
 
 2. **Setup MongoDB:**
     * Go through the setup wizard completely.
@@ -66,7 +66,7 @@ Visit `http://localhost:3000` in your browser to access the LockScript client.
 
 ## Contributing
 
-We welcome contributions from the community. If you'd like to enhance LockScript, please follow our ![Contribution Guidelines](https://github.com/cvs0/LockScript/CONTRIBUTING.md).
+We welcome contributions from the community. If you'd like to enhance LockScript, please follow our [Contribution Guidelines](https://github.com/cvs0/LockScript/CONTRIBUTING.md).
 
 ## Pull Request Requirements
 1. **Code Quality:**
@@ -103,7 +103,7 @@ We encourage the community to share feedback and suggest features. Please open a
 A: Absolutely! LockScript is designed for both personal and professional use, providing a secure and user-friendly password management solution.
 
 #### Q: How do I set up LockScript?
-A: You need to regenerate the `public.key` and `private.key` using ![this site](https://travistidwell.com/jsencrypt/demo/) and update all instances of the `secure: false` property in the `user.controller.ts` file to `secure: true` (only if you are using TLS).
+A: You need to regenerate the `public.key` and `private.key` using [this site](https://travistidwell.com/jsencrypt/demo/) and update all instances of the `secure: false` property in the `user.controller.ts` file to `secure: true` (only if you are using TLS).
 
 ## Media
 ![Login Page UI](media/login-page-ui.png)
@@ -113,8 +113,8 @@ A: You need to regenerate the `public.key` and `private.key` using ![this site](
 
 ## License
 
-LockScript is licensed under the ![MIT License](https://github.com/cvs0/LockScript/blob/main/LICENSE), ensuring open collaboration and flexibility.
+LockScript is licensed under the [MIT License](https://github.com/cvs0/LockScript/blob/main/LICENSE), ensuring open collaboration and flexibility.
 
 ## Support
 
-If you encounter any issues or have questions, feel free to ![open an issue](http://github.com/cvs0/LockScript/issues) on the repository.
+If you encounter any issues or have questions, feel free to [open an issue](http://github.com/cvs0/LockScript/issues) on the repository.
