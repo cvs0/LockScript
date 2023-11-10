@@ -56,7 +56,7 @@ Visit `http://localhost:3000` in your browser to access the LockScript client.
 ## Database Setup
 
 1. **Download MongoDB:**
-    * ![Downlaod MongoDB](https://www.mongodb.com/try/download/community).
+    * [Downlaod MongoDB](https://www.mongodb.com/try/download/community).
 
 2. **Setup MongoDB:**
     * Go through the setup wizard completely.
