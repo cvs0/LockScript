@@ -1,7 +1,6 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "main": "index.js",
   "repository": "https://github.com/cvs0/LockScript",
   "author": "cvs0",
   "license": "MIT",
