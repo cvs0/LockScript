@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { decryptVault, generateVaultKey, hashPassword } from "../crypto";
 import { useMutation } from "react-query";
 import { loginUser } from "../api";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { VaultItem } from "../pages";
 
 function LoginForm({
@@ -22,8 +22,10 @@ function LoginForm({
         register,
         getValues,
         setValue,
-        formState: { errors, isSubmitting },
+        formState: { errors },
     } = useForm<{email: string, password: string, hashedPassword: string}>();
+
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
     const mutation = useMutation(loginUser, {
         onSuccess: ({salt, vault}) => {
@@ -43,7 +45,12 @@ function LoginForm({
             window.sessionStorage.setItem("vault", JSON.stringify(decryptedVault));
 
             setStep('vault');
-        }
+        },
+        onError: (error: any) => {
+            const errorMessage =
+              error.response?.data?.message || "An error occurred. Please try again later.";
+            setErrorMessage(errorMessage);
+          },
     });
 
     return (
@@ -91,11 +98,15 @@ function LoginForm({
                 />
 
                 <FormErrorMessage>
-                    {errors.email && errors.email.message}
+                    {errors.password && errors.password.message}
                 </FormErrorMessage>
             </FormControl>
 
-            <Button mt="4" type="submit">
+            {errorMessage && (
+                <div style={{ color: "red", marginTop: "10px" }}>{errorMessage}</div>
+            )}
+
+            <Button mt="4" type="submit" isLoading={mutation.isLoading}>
                 Login
             </Button>
         </FormWrapper>
