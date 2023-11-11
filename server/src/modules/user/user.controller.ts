@@ -45,26 +45,6 @@ export async function registerUserHandler(
   }
 }
 
-export async function handleEmail(
-  request: FastifyRequest,
-  reply: FastifyReply
-) {
-  try {
-    const userId = request.headers['user-id'];
-
-    const user = await UserModel.findById(userId);
-
-    if (!user) {
-      return reply.status(404).send({ message: 'User not found' });
-    }
-
-    return reply.send({ email: user.email });
-  } catch (error) {
-    console.error('Error fetching user email:', error);
-    return reply.status(500).send({ message: 'Internal Server Error' });
-  }
-}
-
 export async function loginHandler(
   request: FastifyRequest<{
     Body: Parameters<typeof createUser>[number];

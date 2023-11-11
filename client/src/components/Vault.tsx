@@ -46,7 +46,7 @@ import {
   } from "@chakra-ui/react";
   import { encryptVault } from "../crypto";
   import { useMutation } from "react-query";
-  import { getEmail, saveVault } from "../api";
+  import { saveVault } from "../api";
   import { useEffect, useState } from "react";
   import { useRouter } from "next/router";
 import axios from "axios";
@@ -122,7 +122,6 @@ import axios from "axios";
     const [isAppearanceOpen, setIsAppearanceOpen] = useState(true);
     const [isNotificationOpen, setIsNotificationOpen] = useState(true);
     const [isSecurityOpen, setIsSecurityOpen] = useState(true);
-    const [email, setEmail] = useState('');
     const handleGeneratePassword = (
       index: any,
       includeSpecialChars: boolean,
@@ -157,9 +156,6 @@ import axios from "axios";
     useEffect(() => {
       const fetchData = async () => {
         try {
-          const email = await getEmail();
-          setEmail(email);
-    
           const storedSettings = sessionStorage.getItem("settings");
           if (storedSettings) {
             const parsedSettings = JSON.parse(storedSettings);
@@ -286,9 +282,6 @@ import axios from "axios";
               <Avatar size="sm" icon={<FaUser />} />
             </MenuButton>
             <MenuList>
-              <MenuItem>
-                <span>{email}</span>
-              </MenuItem>
               <MenuItem>
                 <Button
                   leftIcon={<FaCog />}
