@@ -75,21 +75,8 @@ function CountryDropdown({onSelect} : CountryDropdownProps) {
             value={country}> {country} </option>))
     } </Select>);
 }
-function generateRandomPassword() {
-    const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    let password = "";
-    for (let i = 0; i < 12; i++) {
-        const randomIndex = Math.floor(Math.random() * charset.length);
-        password += charset.charAt(randomIndex);
-    }
-    const textarea = document.createElement("textarea");
-    textarea.value = password;
-    document.body.appendChild(textarea);
-    textarea.select();
-    document.execCommand("copy");
-    document.body.removeChild(textarea);
-    return password;
-}
+
+
 function Vault({
     vault = [],
     vaultKey = ""
@@ -111,7 +98,7 @@ function Vault({
     const [includeSpecialChars, setIncludeSpecialChars] = useState(false);
     const [copyToClipboard, setCopyToClipboard] = useState(false);
     const [currentItemIndex, setCurrentItemIndex] = useState < number | null > (null);
-    const handleGeneratePassword = (index : any, includeSpecialChars : boolean, passwordLength : number) => {
+    const handleGeneratePassword = (index : any, includeSpecialChars : boolean, passwordLength : number, copyToClipboard : boolean) => {
         let charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         if (includeSpecialChars) {
             charset += "!@#$%^&*()-_+=<>?/{}[]|";
@@ -122,6 +109,18 @@ function Vault({
             password += charset.charAt(randomIndex);
         }
         setValue(`vault.${index}.password`, password);
+
+        if (copyToClipboard) {
+            const textarea = document.createElement("textarea");
+            textarea.value = password;
+            document.body.appendChild(textarea);
+    
+            textarea.select();
+            document.execCommand("copy");
+    
+            document.body.removeChild(textarea);
+        }
+
         setShowPasswordOptions(false);
     };
     const mutation = useMutation(saveVault);
@@ -169,6 +168,17 @@ function Vault({
                                     () => setIncludeSpecialChars(!includeSpecialChars)
                                 }/>
                         </FormControl>
+
+                        <FormControl display="flex" alignItems="center">
+                            <FormLabel htmlFor="copyToClipboard" mb="0">
+                                Copy to Clipboard
+                            </FormLabel>
+                            <Switch id="copyToClipboard"
+                                isChecked={copyToClipboard}
+                                onChange={
+                                    () => setCopyToClipboard(!copyToClipboard)
+                                }/>
+                        </FormControl>
                     </Stack>
                 </ModalBody>
                 <ModalFooter>
@@ -179,10 +189,9 @@ function Vault({
                     }>
                         Close
                     </Button>
-                    {/* Generate Button */}
                     <Button colorScheme="green"
                         onClick={
-                            () => handleGeneratePassword(currentItemIndex, includeSpecialChars, passwordLength)
+                            () => handleGeneratePassword(currentItemIndex, includeSpecialChars, passwordLength, copyToClipboard)
                     }>
                         Generate
                     </Button>
@@ -226,7 +235,7 @@ function Vault({
             <DrawerOverlay/>
             <DrawerContent>
                 <DrawerHeader>Settings</DrawerHeader>
-                <DrawerBody> {/* Dark Mode Switch */}
+                <DrawerBody>
                     <FormControl display="flex" alignItems="center" mb="4">
                         <FormLabel htmlFor="darkMode" mb="0">
                             Dark Mode
@@ -237,7 +246,6 @@ function Vault({
                                 () => setDarkMode(!darkMode)
                             }/>
                     </FormControl>
-                    {/* Notification Switch */}
                     <FormControl display="flex" alignItems="center" mb="4">
                         <FormLabel htmlFor="notification" mb="0">
                             Notifications
@@ -248,7 +256,6 @@ function Vault({
                                 () => setNotification(!notification)
                             }/>
                     </FormControl>
-                    {/* Country Dropdown */}
                     <FormControl mb="4">
                         <FormLabel htmlFor="country">Country</FormLabel>
                         <CountryDropdown onSelect={
