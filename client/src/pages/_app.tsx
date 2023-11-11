@@ -1,4 +1,4 @@
-import { ChakraProvider } from '@chakra-ui/react';
+import { CSSReset, ChakraProvider, ColorModeProvider } from '@chakra-ui/react';
 import { AppProps } from 'next/app';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
@@ -8,7 +8,10 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <QueryClientProvider client={queryClient}>
       <ChakraProvider>
-        <Component {...pageProps } />
+        <ColorModeProvider>
+          <CSSReset />
+          <Component {...pageProps } />
+        </ColorModeProvider>
       </ChakraProvider>
     </QueryClientProvider>
   );

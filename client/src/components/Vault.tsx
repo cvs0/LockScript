@@ -35,7 +35,8 @@ import {
     ModalOverlay,
     Select,
     Stack,
-    Switch
+    Switch,
+    useColorMode
 } from "@chakra-ui/react";
 import {encryptVault} from "../crypto";
 import {useMutation} from "react-query";
@@ -98,6 +99,7 @@ function Vault({
     const [includeSpecialChars, setIncludeSpecialChars] = useState(false);
     const [copyToClipboard, setCopyToClipboard] = useState(false);
     const [currentItemIndex, setCurrentItemIndex] = useState < number | null > (null);
+    const { colorMode, toggleColorMode } = useColorMode();
     const handleGeneratePassword = (index : any, includeSpecialChars : boolean, passwordLength : number, copyToClipboard : boolean) => {
         let charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         if (includeSpecialChars) {
@@ -123,11 +125,33 @@ function Vault({
 
         setShowPasswordOptions(false);
     };
+    useEffect(() => {
+        const storedSettings = sessionStorage.getItem('settings');
+        if (storedSettings) {
+          const parsedSettings = JSON.parse(storedSettings);
+          setDarkMode(parsedSettings.darkMode);
+          setNotification(parsedSettings.notification);
+          setLocation(parsedSettings.location);
+        }
+      }, []);
+    const saveSettingsToSessionStorage = () => {
+        const settings = {
+          darkMode,
+          notification,
+          location,
+        };
+        sessionStorage.setItem('settings', JSON.stringify(settings));
+      };
     const mutation = useMutation(saveVault);
     const handleLogout = () => {
         window.sessionStorage.clear();
         window.location.reload();
     };
+    const handleDarkModeToggle = () => {
+        setDarkMode(!darkMode);
+        toggleColorMode();
+        saveSettingsToSessionStorage();
+      };
     return (<FormWrapper onSubmit={
         handleSubmit(({vault}) => {
             console.log({vault});
@@ -240,11 +264,11 @@ function Vault({
                         <FormLabel htmlFor="darkMode" mb="0">
                             Dark Mode
                         </FormLabel>
-                        <Switch id="darkMode"
-                            isChecked={darkMode}
-                            onChange={
-                                () => setDarkMode(!darkMode)
-                            }/>
+                        <Switch
+                            id="darkMode"
+                            isChecked={colorMode === 'dark'}
+                            onChange={handleDarkModeToggle}
+                            />
                     </FormControl>
                     <FormControl display="flex" alignItems="center" mb="4">
                         <FormLabel htmlFor="notification" mb="0">
