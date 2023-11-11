@@ -15,5 +15,5 @@ export function updateVault({
 }
 
 export function findVaultByUser(userId: string) {
-  return VaultModel.findOne({user: userId});
+  return VaultModel.findOne({ user: userId });
 }

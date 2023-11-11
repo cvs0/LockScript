@@ -1,67 +1,70 @@
 import fastify, { FastifyReply, FastifyRequest } from "fastify";
 import cors from "@fastify/cors";
 import jwt from "@fastify/jwt";
-import fs from 'fs';
-import path from 'path';
+import fs from "fs";
+import path from "path";
 import { CORS_ORIGIN } from "../constants";
 import cookie from "@fastify/cookie";
 import vaultRoutes from "../modules/vault/vault.route";
 import userRoutes from "../modules/user/user.routes";
 
 declare module "fastify" {
-    export interface FastifyInstance {
-        authenticate: any;
-    }
+  export interface FastifyInstance {
+    authenticate: any;
+  }
 }
 
 function createServer() {
-    const app = fastify()
-    
-    app.register(cors, {
-        origin: CORS_ORIGIN,
-        credentials: true,
-    });
+  const app = fastify();
 
-    app.register(jwt, {
-        secret: {
-            private: fs.readFileSync(
-                `${(path.join(process.cwd()), "certs")}/private.key`
-            ),
-            public: fs.readFileSync(
-                `${(path.join(process.cwd()), "certs")}/public.key`
-            ),
-        },
+  app.register(cors, {
+    origin: CORS_ORIGIN,
+    credentials: true,
+  });
 
-        sign: {
-            algorithm: 'RS256',
-        },
+  app.register(jwt, {
+    secret: {
+      private: fs.readFileSync(
+        `${(path.join(process.cwd()), "certs")}/private.key`
+      ),
+      public: fs.readFileSync(
+        `${(path.join(process.cwd()), "certs")}/public.key`
+      ),
+    },
 
-        cookie: {
-            cookieName: 'token',
-            signed: false,
-        },
-    });
+    sign: {
+      algorithm: "RS256",
+    },
 
-    app.register(cookie, {
-        parseOptions: {},
-    });
+    cookie: {
+      cookieName: "token",
+      signed: false,
+    },
+  });
 
-    app.decorate("authenticate", async (request: FastifyRequest, reply: FastifyReply) => {
-        try {
-            const user = await request.jwtVerify<{
-                _id: string;
-            }>();
+  app.register(cookie, {
+    parseOptions: {},
+  });
 
-            request.user = user;
-        } catch(e) {
-            return reply.send(e);
-        }
-    });
+  app.decorate(
+    "authenticate",
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      try {
+        const user = await request.jwtVerify<{
+          _id: string;
+        }>();
 
-    app.register(userRoutes, { prefix: "api/users" });
-    app.register(vaultRoutes, { prefix: "api/vault" });
+        request.user = user;
+      } catch (e) {
+        return reply.send(e);
+      }
+    }
+  );
 
-    return app;
+  app.register(userRoutes, { prefix: "api/users" });
+  app.register(vaultRoutes, { prefix: "api/vault" });
+
+  return app;
 }
 
-export default createServer
+export default createServer;
