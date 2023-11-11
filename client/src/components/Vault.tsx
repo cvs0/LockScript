@@ -1,5 +1,8 @@
 /* eslint-disable react/jsx-no-undef */
 import {
+    FaArrowAltCircleDown,
+    FaArrowCircleDown,
+    FaArrowCircleRight,
     FaCog,
     FaSignOutAlt,
     FaSync,
@@ -13,11 +16,13 @@ import {
     Avatar,
     Box,
     Button,
+    Collapse,
     Drawer,
     DrawerBody,
     DrawerContent,
     DrawerHeader,
     DrawerOverlay,
+    Flex,
     FormControl,
     FormLabel,
     Input,
@@ -36,6 +41,7 @@ import {
     Select,
     Stack,
     Switch,
+    TagRightIcon,
     useColorMode
 } from "@chakra-ui/react";
 import {encryptVault} from "../crypto";
@@ -100,6 +106,9 @@ function Vault({
     const [copyToClipboard, setCopyToClipboard] = useState(false);
     const [currentItemIndex, setCurrentItemIndex] = useState < number | null > (null);
     const { colorMode, toggleColorMode } = useColorMode();
+    const [isAppearanceOpen, setIsAppearanceOpen] = useState(true);
+    const [isNotificationOpen, setIsNotificationOpen] = useState(true);
+    const [isSecurityOpen, setIsSecurityOpen] = useState(true);
     const handleGeneratePassword = (index : any, includeSpecialChars : boolean, passwordLength : number, copyToClipboard : boolean) => {
         let charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         if (includeSpecialChars) {
@@ -222,7 +231,7 @@ function Vault({
                 </ModalFooter>
             </ModalContent>
         </Modal>
-        <Box position="absolute" top="4" right="4" display="flex" alignItems="center">
+        <Box position="fixed" top="4" right="4" display="flex" alignItems="center">
             <Menu>
                 <MenuButton as={Button}
                     bg="transparent">
@@ -251,41 +260,103 @@ function Vault({
                 </MenuList>
             </Menu>
         </Box>
-        <Drawer isOpen={isSettingsOpen}
-            onClose={
-                () => setIsSettingsOpen(false)
-            }
-            placement="right">
-            <DrawerOverlay/>
+
+        <Drawer isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} placement="right">
+            <DrawerOverlay />
             <DrawerContent>
-                <DrawerHeader>Settings</DrawerHeader>
+            <DrawerHeader
+                borderBottomWidth="2px"
+                p="6"
+                fontSize="2xl"
+                fontWeight="extrabold"
+                color="white"
+                bgGradient="linear(to-r, teal.500, teal.300)"
+                boxShadow="md"
+                textAlign="center"
+            >
+                Settings
+            </DrawerHeader>
+
                 <DrawerBody>
-                    <FormControl display="flex" alignItems="center" mb="4">
-                        <FormLabel htmlFor="darkMode" mb="0">
-                            Dark Mode
-                        </FormLabel>
-                        <Switch
-                            id="darkMode"
-                            isChecked={colorMode === 'dark'}
-                            onChange={handleDarkModeToggle}
-                            />
-                    </FormControl>
-                    <FormControl display="flex" alignItems="center" mb="4">
-                        <FormLabel htmlFor="notification" mb="0">
+
+                    {/* Appearance Section */}
+                    <Flex align="center" justify="space-between" mb="2">
+                        <Button
+                            variant="link"
+                            fontSize="lg"
+                            fontWeight="bold"
+                            onClick={() => setIsAppearanceOpen(!isAppearanceOpen)}
+                            rightIcon={isAppearanceOpen ? <FaArrowAltCircleDown /> : <FaArrowCircleRight />}
+                        >
+                            Appearance
+                        </Button>
+                    </Flex>
+
+                    <Collapse in={isAppearanceOpen}>
+                        <div>
+                            <FormControl display="flex" alignItems="center" mb="4">
+                                <FormLabel htmlFor="darkMode" mb="0">
+                                    Dark Mode
+                                </FormLabel>
+                                <Switch
+                                    id="darkMode"
+                                    isChecked={colorMode === 'dark'}
+                                    onChange={handleDarkModeToggle}
+                                />
+                            </FormControl>
+                        </div>
+                    </Collapse>
+
+                    {/* Notification Section */}
+                    <Flex align="center" justify="space-between" mb="2">
+                        <Button
+                            variant="link"
+                            fontSize="lg"
+                            fontWeight="bold"
+                            onClick={() => setIsNotificationOpen(!isNotificationOpen)}
+                            rightIcon={isNotificationOpen ? <FaArrowAltCircleDown /> : <FaArrowCircleRight />}
+                        >
                             Notifications
-                        </FormLabel>
-                        <Switch id="notification"
-                            isChecked={notification}
-                            onChange={
-                                () => setNotification(!notification)
-                            }/>
-                    </FormControl>
-                    <FormControl mb="4">
-                        <FormLabel htmlFor="country">Country</FormLabel>
-                        <CountryDropdown onSelect={
-                            (selectedCountry) => setLocation(selectedCountry)
-                        }/>
-                    </FormControl>
+                        </Button>
+                    </Flex>
+
+                    <Collapse in={isNotificationOpen}>
+                        <div>
+                            <FormControl display="flex" alignItems="center" mb="4">
+                                <FormLabel htmlFor="notification" mb="0">
+                                    Notifications
+                                </FormLabel>
+                                <Switch
+                                    id="notification"
+                                    isChecked={notification}
+                                    onChange={() => setNotification(!notification)}
+                                />
+                            </FormControl>
+                        </div>
+                    </Collapse>
+
+                    {/* Security Section */}
+                    <Flex align="center" justify="space-between" mb="2">
+                        <Button
+                            variant="link"
+                            fontSize="lg"
+                            fontWeight="bold"
+                            onClick={() => setIsSecurityOpen(!isSecurityOpen)}
+                            rightIcon={isSecurityOpen ? <FaArrowAltCircleDown /> : <FaArrowCircleRight />}
+                        >
+                            Security
+                        </Button>
+                    </Flex>
+
+                    <Collapse in={isSecurityOpen}>
+                        <div>
+                            <FormControl mb="4">
+                                <FormLabel htmlFor="country">Country</FormLabel>
+                                <CountryDropdown onSelect={(selectedCountry) => setLocation(selectedCountry)} />
+                            </FormControl>
+                        </div>
+                    </Collapse>
+
                 </DrawerBody>
             </DrawerContent>
         </Drawer>
