@@ -81,7 +81,7 @@ import {
             id="email"
             placeholder="Email"
             {...register("email", {
-              required: "Email is required",
+              required: "Email is required.",
               minLength: { value: 4, message: "Email must be 4 characters long" },
             })}
           />
@@ -99,7 +99,7 @@ import {
             placeholder="Password"
             type="password"
             {...register("password", {
-              required: "Password is required",
+              required: "Password is required.",
               minLength: {
                 value: 6,
                 message: "Password must be 4 characters long",
