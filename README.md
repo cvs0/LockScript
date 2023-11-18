@@ -35,6 +35,10 @@ LockScript is an advanced, server-client password manager developed with cutting
 2. **Install Dependencies:**
     ```bash
     cd LockScript
+    cd client
+    npm install
+    cd ..
+    cd server
     npm install
     ```
 
