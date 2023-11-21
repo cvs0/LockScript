@@ -61,6 +61,10 @@ import {
         setErrorMessage(errorMessage);
       },
     });
+
+    const handleRegistrationClick = () => {
+      setStep("register");
+    };
   
     return (
       <FormWrapper
@@ -123,6 +127,13 @@ import {
         <Button mt="4" type="submit" isLoading={mutation.isLoading}>
           Login
         </Button>
+
+        <div style={{ marginTop: "20px" }}>
+          {/* Registration button with styling */}
+          <Button variant="outline" onClick={handleRegistrationClick}>
+            Register
+          </Button>
+        </div>
       </FormWrapper>
     );
   }

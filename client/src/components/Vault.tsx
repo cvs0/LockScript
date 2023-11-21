@@ -4,6 +4,7 @@ import {
     FaArrowCircleDown,
     FaArrowCircleRight,
     FaCog,
+    FaExternalLinkAlt,
     FaSignOutAlt,
     FaSync,
     FaTimes,
@@ -170,6 +171,12 @@ import axios from "axios";
     
       fetchData();
     }, []);
+
+    const handleGoToWebsite = (website: string) => {
+      if (website) {
+        window.open(website, "_blank");
+      }
+    };
     
     const saveSettingsToSessionStorage = () => {
       const settings = {
@@ -445,6 +452,15 @@ import axios from "axios";
                   })}
                 />
               </FormControl>
+
+              <Button
+                type="button"
+                ml="2"
+                onClick={() => handleGoToWebsite(field.website)}
+                variant="ghost"
+              >
+                <FaExternalLinkAlt />
+              </Button>
               <FormControl ml="2">
                 <FormLabel htmlFor="username">Username</FormLabel>
                 <Input
