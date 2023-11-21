@@ -5,36 +5,44 @@ import { connectToDb, disconnectFromDB } from "./utils/db";
 
 function gracefulShutdown(signal: string, app: FastifyInstance) {
   process.on(signal, async () => {
-    logger.info("Shutting down server gracefully.");
-    logger.info(`Recieved signal ${signal}`);
+    try {
+      logger.info("Shutting down server gracefully.");
+      logger.info(`Received signal ${signal}`);
 
-    app.close();
+      await app.close();
+      await disconnectFromDB();
 
-    await disconnectFromDB();
-
-    logger.info("Shutdown.");
-    process.exit(0);
+      logger.info("Shutdown.");
+      process.exit(0);
+    } catch (error) {
+      logger.error("Error during graceful shutdown:", error);
+      process.exit(1);
+    }
   });
 }
 
-async function main() {
+async function startServer() {
   const app = createServer();
 
   try {
     const url = await app.listen(4000, "0.0.0.0");
-
     logger.info(`Server is ready at ${url}`);
 
     await connectToDb();
-  } catch (e) {
-    logger.error(e);
+    return app;
+  } catch (error) {
+    logger.error("Error starting the server:", error);
     process.exit(1);
   }
+}
+
+async function main() {
+  const app = await startServer();
 
   const signals = ["SIGTERM", "SIGINT"];
 
-  for (let i = 0; i < signals.length; i++) {
-    gracefulShutdown(signals[i], app);
+  for (const signal of signals) {
+    gracefulShutdown(signal, app);
   }
 }
 

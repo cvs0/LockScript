@@ -23,18 +23,30 @@ async function genHash(password: string) {
   return argon2.hash(password);
 }
 
+interface UserCredentials {
+  email: string;
+  hashedPassword: string;
+}
+
 export async function findUserByEmailAndPassword({
   email,
   hashedPassword,
-}: {
-  email: string;
-  hashedPassword: string;
-}) {
-  const user = await UserModel.findOne({ email });
+}: UserCredentials) {
+  try {
+    const user = await UserModel.findOne({ email });
 
-  if (!user || !(await argon2.verify(user.password, hashedPassword))) {
-    return null;
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    const isPasswordValid = await argon2.verify(user.password, hashedPassword);
+    if (!isPasswordValid) {
+      throw new Error("Invalid credentials.");
+    }
+
+    return user;
+  } catch (error) {
+    console.error("Error finding user:", error);
+    throw new Error("Internal server error");
   }
-
-  return user;
 }
