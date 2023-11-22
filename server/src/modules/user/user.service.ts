@@ -1,6 +1,7 @@
 import { UserModel } from "./user.model";
 import crypto from "crypto";
 import argon2 from "argon2";
+import { Types } from "mongoose";
 
 // generate salt
 export function generateSalt() {

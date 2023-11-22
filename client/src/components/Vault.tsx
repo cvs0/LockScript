@@ -56,6 +56,8 @@ import { saveVault } from "../api";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
+
+
 interface CountryDropdownProps {
   onSelect: (selectedCountry: string) => void;
 }
@@ -129,6 +131,7 @@ function Vault({
   const [isNotificationOpen, setIsNotificationOpen] = useState(true);
   const [isSecurityOpen, setIsSecurityOpen] = useState(true);
   const [copied, setCopied] = useState(false);
+
   const handleGeneratePassword = (
     index: any,
     includeSpecialChars: boolean,

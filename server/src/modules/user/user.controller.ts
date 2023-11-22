@@ -7,7 +7,7 @@ import {
 import { createVault, findVaultByUser } from "../vault/vault.service";
 import { COOKIE_DOMAIN } from "../../constants";
 import logger from "../../utils/logger";
-import { User, UserModel } from "./user.model";
+import { get } from "lodash";
 
 export async function registerUserHandler(
   request: FastifyRequest<{
@@ -24,7 +24,7 @@ export async function registerUserHandler(
 
     const vault = await createVault({ user: user._id.toString(), salt });
     const accessToken = await reply.jwtSign({
-      _id: user._id,
+      _id: user._id!,
       email: user.email,
     });
 
@@ -62,7 +62,7 @@ export async function loginHandler(
   const vault = await findVaultByUser(user._id.toString());
 
   const accessToken = await reply.jwtSign({
-    _id: user._id,
+    _id: user._id!,
     email: user.email,
   });
 
