@@ -57,7 +57,6 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
 
-
 interface CountryDropdownProps {
   onSelect: (selectedCountry: string) => void;
 }
@@ -76,6 +75,7 @@ function CountryDropdown({ onSelect }: CountryDropdownProps) {
             };
           }) => country.name.common
         );
+
         setCountries(countryList);
       } catch (error) {
         console.error("Error fetching countries:", error);
