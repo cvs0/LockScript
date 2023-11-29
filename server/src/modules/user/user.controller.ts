@@ -5,7 +5,7 @@ import {
   generateSalt,
 } from "./user.service";
 import { createVault, findVaultByUser } from "../vault/vault.service";
-import { COOKIE_DOMAIN } from "../../constants";
+import { COOKIE_DOMAIN, SECURE } from "../../constants";
 import logger from "../../utils/logger";
 
 /**
@@ -43,7 +43,7 @@ export async function registerUserHandler(
     reply.setCookie("token", accessToken, {
       domain: COOKIE_DOMAIN,
       path: "/",
-      secure: false, // Set to true in production when using TLS.
+      secure: SECURE,
       httpOnly: true,
       sameSite: false,
     });
@@ -92,7 +92,7 @@ export async function loginHandler(
   reply.setCookie("token", accessToken, {
     domain: COOKIE_DOMAIN,
     path: "/",
-    secure: false, // Set to true in production when using TLS.
+    secure: SECURE,
     httpOnly: true,
     sameSite: false,
   });
