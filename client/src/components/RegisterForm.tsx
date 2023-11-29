@@ -1,5 +1,6 @@
 import {
   Button,
+  Flex,
   FormControl,
   FormErrorMessage,
   FormLabel,
@@ -14,6 +15,11 @@ import { registerUser } from "../api";
 import { Dispatch, SetStateAction, useState } from "react";
 import FormWrapper from "./FormWrapper";
 
+type PasswordVisibility = {
+  password: boolean;
+  confirmPassword: boolean;
+};
+
 function RegisterForm({
   setVaultKey,
   setStep,
@@ -27,13 +33,24 @@ function RegisterForm({
     getValues,
     setValue,
     formState: { errors, isSubmitting },
-  } = useForm<{ email: string; password: string; confirmPassword: string; hashedPassword: string }>();
+  } = useForm<{
+    email: string;
+    password: string;
+    confirmPassword: string;
+    hashedPassword: string;
+  }>();
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [isPasswordVisible, setIsPasswordVisible] = useState<PasswordVisibility>({
+    password: false,
+    confirmPassword: false,
+  });
 
-  const togglePasswordVisibility = () => {
-    setIsPasswordVisible((prev) => !prev);
+  const togglePasswordVisibility = (field: keyof PasswordVisibility) => {
+    setIsPasswordVisible((prev) => ({
+      ...prev,
+      [field]: !prev[field],
+    }));
   };
 
   const mutation = useMutation(registerUser, {
@@ -110,27 +127,28 @@ function RegisterForm({
       <FormControl mt="4">
         <FormLabel htmlFor="password">Password</FormLabel>
 
-        <Input
-          id="password"
-          placeholder="Password"
-          type={isPasswordVisible ? "text" : "password"}
-          {...register("password", {
-            required: "Password is required.",
-            minLength: {
-              value: 6,
-              message: "Password must be 6 characters long",
-            },
-          })}
-        />
-
-        <Button
-          size="sm"
-          ml="2"
-          variant="ghost"
-          onClick={togglePasswordVisibility}
-        >
-          {isPasswordVisible ? <FiEyeOff /> : <FiEye />}
-        </Button>
+        <Flex align="center">
+          <Input
+            id="password"
+            placeholder="Password"
+            type={isPasswordVisible.password ? "text" : "password"}
+            {...register("password", {
+              required: "Password is required.",
+              minLength: {
+                value: 6,
+                message: "Password must be 6 characters long",
+              },
+            })}
+          />
+          <Button
+            size="sm"
+            ml="2"
+            variant="ghost"
+            onClick={() => togglePasswordVisibility("password")}
+          >
+            {isPasswordVisible.password ? <FiEyeOff /> : <FiEye />}
+          </Button>
+        </Flex>
 
         <FormErrorMessage>
           {errors.password && errors.password.message}
@@ -139,16 +157,27 @@ function RegisterForm({
 
       <FormControl mt="4">
         <FormLabel htmlFor="confirmPassword">Confirm Password</FormLabel>
+        
+        <Flex align="center">
+          <Input
+            id="confirmPassword"
+            placeholder="Confirm Password"
+            type={isPasswordVisible.confirmPassword ? "text" : "password"}
+            {...register("confirmPassword", {
+              required: "Please confirm your password.",
+            })}
+          />
 
-        <Input
-          id="confirmPassword"
-          placeholder="Confirm Password"
-          type="password"
-          {...register("confirmPassword", {
-            required: "Please confirm your password.",
-          })}
-        />
-
+          <Button
+            size="sm"
+            ml="2"
+            variant="ghost"
+            onClick={() => togglePasswordVisibility("confirmPassword")}
+          >
+            {isPasswordVisible.confirmPassword ? <FiEyeOff /> : <FiEye />}
+          </Button>
+        </Flex>
+        
         <FormErrorMessage>
           {errors.confirmPassword && errors.confirmPassword.message}
         </FormErrorMessage>
