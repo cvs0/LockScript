@@ -29,7 +29,7 @@ export async function registerUserHandler(
 
     // Generate a salt for the user's vault.
     const salt = generateSalt();
-
+    
     // Create a vault for the user.
     const vault = await createVault({ user: user._id.toString(), salt });
 

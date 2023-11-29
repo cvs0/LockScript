@@ -124,6 +124,7 @@ function Vault({
   const [showPasswordOptions, setShowPasswordOptions] = useState(false);
   const [passwordLength, setPasswordLength] = useState(12);
   const [includeSpecialChars, setIncludeSpecialChars] = useState(false);
+  const [includeUppercaseChars, setIncludeUppercaseChars] = useState(false);
   const [copyToClipboard, setCopyToClipboard] = useState(false);
   const [currentItemIndex, setCurrentItemIndex] = useState<number | null>(null);
   const { colorMode, toggleColorMode } = useColorMode();
@@ -135,18 +136,31 @@ function Vault({
   const handleGeneratePassword = (
     index: any,
     includeSpecialChars: boolean,
+    uppercase: boolean,
     passwordLength: number,
-    copyToClipboard: boolean
+    copyToClipboard: boolean,
   ) => {
-    let charset =
-      "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    let charset = "abcdefghijklmnopqrstuvwxyz0123456789";
+    let uppercaseCharset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
     if (includeSpecialChars) {
-      charset += "!@#$%^&*()-_+=<>?/{}[]|";
+      if(uppercase) {
+        uppercaseCharset += "!@#$%^&*()-_+=<>?/{}[]|";
+      } else {
+        charset += "!@#$%^&*()-_+=<>?/{}[]|";
+      }
     }
+
     let password = "";
+
     for (let i = 0; i < passwordLength; i++) {
-      const randomIndex = Math.floor(Math.random() * charset.length);
-      password += charset.charAt(randomIndex);
+      if(uppercaseCharset) {
+        const randomIndex = Math.floor(Math.random() * uppercaseCharset.length);
+        password += uppercaseCharset.charAt(randomIndex);
+      } else {
+        const randomIndex = Math.floor(Math.random() * charset.length);
+        password += charset.charAt(randomIndex);
+      }
     }
     setValue(`vault.${index}.password`, password);
 
@@ -169,6 +183,7 @@ function Vault({
         const storedSettings = sessionStorage.getItem("settings");
         if (storedSettings) {
           const parsedSettings = JSON.parse(storedSettings);
+
           setDarkMode(parsedSettings.darkMode);
           setNotification(parsedSettings.notification);
           setLocation(parsedSettings.location);
@@ -301,6 +316,16 @@ function Vault({
                 />
               </FormControl>
               <FormControl display="flex" alignItems="center">
+                <FormLabel htmlFor="includeUppercaseChars" mb="0">
+                  Include Uppercase Characters
+                </FormLabel>
+                <Switch
+                  id="includeUppercaseChars"
+                  isChecked={includeUppercaseChars}
+                  onChange={() => setIncludeUppercaseChars(!includeUppercaseChars)}
+                />
+              </FormControl>
+              <FormControl display="flex" alignItems="center">
                 <FormLabel htmlFor="copyToClipboard" mb="0">
                   Copy to Clipboard
                 </FormLabel>
@@ -319,6 +344,7 @@ function Vault({
                 handleGeneratePassword(
                   currentItemIndex,
                   includeSpecialChars,
+                  includeUppercaseChars,
                   passwordLength,
                   copyToClipboard
                 )

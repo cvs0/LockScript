@@ -6,13 +6,13 @@ import {
   Heading,
   Input,
 } from "@chakra-ui/react";
-import FormWrapper from "./FormWrapper";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 import { useForm } from "react-hook-form";
 import { generateVaultKey, hashPassword } from "../crypto";
 import { useMutation } from "react-query";
 import { registerUser } from "../api";
 import { Dispatch, SetStateAction, useState } from "react";
-import { VaultItem } from "../pages";
+import FormWrapper from "./FormWrapper";
 
 function RegisterForm({
   setVaultKey,
@@ -27,9 +27,14 @@ function RegisterForm({
     getValues,
     setValue,
     formState: { errors, isSubmitting },
-  } = useForm<{ email: string; password: string; hashedPassword: string }>();
+  } = useForm<{ email: string; password: string; confirmPassword: string; hashedPassword: string }>();
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setIsPasswordVisible((prev) => !prev);
+  };
 
   const mutation = useMutation(registerUser, {
     onSuccess: ({ salt, vault }) => {
@@ -67,6 +72,13 @@ function RegisterForm({
       onSubmit={handleSubmit(() => {
         const email = getValues("email");
         const password = getValues("password");
+        const confirmPassword = getValues("confirmPassword");
+
+        if (password !== confirmPassword) {
+          setErrorMessage("Passwords do not match.");
+          return;
+        }
+
         const hashedPassword = hashPassword(password);
 
         setValue("hashedPassword", hashedPassword);
@@ -101,18 +113,44 @@ function RegisterForm({
         <Input
           id="password"
           placeholder="Password"
-          type="password"
+          type={isPasswordVisible ? "text" : "password"}
           {...register("password", {
             required: "Password is required.",
             minLength: {
               value: 6,
-              message: "Password must be 4 characters long",
+              message: "Password must be 6 characters long",
             },
           })}
         />
 
+        <Button
+          size="sm"
+          ml="2"
+          variant="ghost"
+          onClick={togglePasswordVisibility}
+        >
+          {isPasswordVisible ? <FiEyeOff /> : <FiEye />}
+        </Button>
+
         <FormErrorMessage>
           {errors.password && errors.password.message}
+        </FormErrorMessage>
+      </FormControl>
+
+      <FormControl mt="4">
+        <FormLabel htmlFor="confirmPassword">Confirm Password</FormLabel>
+
+        <Input
+          id="confirmPassword"
+          placeholder="Confirm Password"
+          type="password"
+          {...register("confirmPassword", {
+            required: "Please confirm your password.",
+          })}
+        />
+
+        <FormErrorMessage>
+          {errors.confirmPassword && errors.confirmPassword.message}
         </FormErrorMessage>
       </FormControl>
 
