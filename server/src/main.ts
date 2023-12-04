@@ -2,6 +2,9 @@ import { FastifyInstance } from "fastify";
 import createServer from "./utils/createServer";
 import logger from "./utils/logger";
 import { connectToDb, disconnectFromDB } from "./utils/db";
+import fs from "fs";
+import path from "path";
+import axios from "axios";
 
 /**
  * Handles the graceful shutdown of the Fastify server.
@@ -27,23 +30,50 @@ async function gracefulShutdown(signal: string, app: FastifyInstance) {
   }
 }
 
+async function fetchKeyFromUrl(url: string): Promise<string> {
+  try {
+    const response = await axios.get(url);
+    return response.data;
+  } catch (error) {
+    logger.error(`Error fetching key from URL ${url}:`, error);
+    process.exit(1);
+  }
+}
+
+async function fetchKeyFromFile(filePath: string): Promise<string> {
+  try {
+    const keyContent = await fs.readFileSync(filePath, "utf-8");
+    return keyContent;
+  } catch (error) {
+    logger.error(`Error reading key from file ${filePath}:`, error);
+    process.exit(1);
+  }
+}
+
 /**
  * Starts the Fastify server, listens on a specified port, and connects to the database.
  * @returns {FastifyInstance} - The Fastify server instance.
  */
 async function startServer(): Promise<FastifyInstance> {
   try {
-    // Create the Fastify server instance.
+    const privateFilePath = path.join(process.cwd(), "certs", "private.key");
+    const publicFilePath = path.join(process.cwd(), "certs", "public.key");
+
+    const privateKeyContent = await fetchKeyFromFile(privateFilePath);
+    const publicKeyContent = await fetchKeyFromFile(publicFilePath);
+
+    if (privateKeyContent === publicKeyContent) {
+      logger.error('The private and public RSA keys are the same. Please check your keys.');
+      process.exit(1);
+    }
+
     const app = createServer();
-    // Listen on the specified port and log the server's URL.
     const url = await app.listen(4000, "0.0.0.0");
     logger.info(`Server is ready at ${url}`);
 
-    // Connect to the database.
     await connectToDb();
     return app;
   } catch (error) {
-    // Log an error if starting the server encounters an error and exit the process with an error status code.
     logger.error("Error starting the server:", error);
     process.exit(1);
   }

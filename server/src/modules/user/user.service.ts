@@ -62,6 +62,7 @@ export async function findUserByEmailAndPassword({
     }
 
     const isPasswordValid = await argon2.verify(user.password, hashedPassword);
+
     if (!isPasswordValid) {
       throw new Error("Invalid credentials.");
     }
@@ -69,6 +70,7 @@ export async function findUserByEmailAndPassword({
     return user;
   } catch (error) {
     console.error("Error finding user:", error);
+    
     throw new Error("Internal server error");
   }
 }
