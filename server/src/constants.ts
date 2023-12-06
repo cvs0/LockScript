@@ -31,3 +31,15 @@ export const COOKIE_DOMAIN = process.env.COOKIE_DOMAIN || "localhost";
  * To enable SECURE mode, set the SECURE environment variable to 'true'. During development or non-production use, SECURE mode should be disabled..
  */
 export const SECURE: boolean = process.env.SECURE === 'true' || false;
+
+/**
+ * Sets the current port for the server to listen on.
+ * This variable will be applied when the server is created.
+ */
+export const PORT: number = 4000;
+
+/**
+ * Sets the current hostname for the server to listen on.
+ * It is localhost, but binded to a single address for better security to prevent unintended access.
+ */
+export const HOST: string = process.env.HOST || "0.0.0.0";

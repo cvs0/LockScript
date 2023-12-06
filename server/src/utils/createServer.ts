@@ -7,7 +7,6 @@ import { CORS_ORIGIN } from "../constants";
 import cookie from "@fastify/cookie";
 import vaultRoutes from "../modules/vault/vault.route";
 import userRoutes from "../modules/user/user.routes";
-import logger from "./logger";
 
 // Extend the FastifyInstance interface to include the 'authenticate' decorator.
 declare module "fastify" {

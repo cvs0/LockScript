@@ -5,6 +5,7 @@ import { connectToDb, disconnectFromDB } from "./utils/db";
 import fs from "fs";
 import path from "path";
 import axios from "axios";
+import { HOST, PORT } from "./constants";
 
 /**
  * Handles the graceful shutdown of the Fastify server.
@@ -68,7 +69,7 @@ async function startServer(): Promise<FastifyInstance> {
     }
 
     const app = createServer();
-    const url = await app.listen(4000, "0.0.0.0");
+    const url = await app.listen(PORT, HOST);
     logger.info(`Server is ready at ${url}`);
 
     await connectToDb();
