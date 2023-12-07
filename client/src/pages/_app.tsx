@@ -1,7 +1,6 @@
 import { CSSReset, ChakraProvider, ColorModeProvider } from "@chakra-ui/react";
 import { AppProps } from "next/app";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { ToastProvider } from "react-toast-notifications";
 
 const queryClient = new QueryClient();
 
