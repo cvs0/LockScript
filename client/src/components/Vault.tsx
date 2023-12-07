@@ -1,7 +1,6 @@
 /* eslint-disable react/jsx-no-undef */
 import {
   FaArrowAltCircleDown,
-  FaArrowCircleDown,
   FaArrowCircleRight,
   FaCog,
   FaCopy,
@@ -28,7 +27,6 @@ import {
   FormControl,
   FormLabel,
   Input,
-  Link,
   Menu,
   MenuButton,
   MenuItem,
@@ -54,15 +52,13 @@ import { encryptVault } from "../crypto";
 import { useMutation } from "react-query";
 import { saveVault } from "../api";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
-import axios from "axios";
 
 interface CountryDropdownProps {
   onSelect: (selectedCountry: string) => void;
 }
 function CountryDropdown({ onSelect }: CountryDropdownProps) {
   const [countries, setCountries] = useState<string[]>([]);
-  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [searchTerm] = useState<string>("");
   useEffect(() => {
     const fetchCountries = async () => {
       try {
