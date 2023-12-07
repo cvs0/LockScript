@@ -1,5 +1,6 @@
 import { getModelForClass, pre, prop } from "@typegoose/typegoose";
 import argon2 from "argon2";
+import { USER_TIMESTAMPS } from "../../constants";
 
 /**
  * Middleware function to hash the user's password before saving or updating the user document.
@@ -33,6 +34,6 @@ export class User {
 export const UserModel = getModelForClass(User, {
   schemaOptions: {
     // Enable automatic timestamping for createdAt and updatedAt fields.
-    timestamps: true,
+    timestamps: USER_TIMESTAMPS,
   },
 });

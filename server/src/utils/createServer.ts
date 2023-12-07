@@ -3,7 +3,7 @@ import cors from "@fastify/cors";
 import jwt from "@fastify/jwt";
 import fs from "fs";
 import path from "path";
-import { CORS_ORIGIN } from "../constants";
+import { COOKIE_NAME, CORS_ORIGIN, SIGNED } from "../constants";
 import cookie from "@fastify/cookie";
 import vaultRoutes from "../modules/vault/vault.route";
 import userRoutes from "../modules/user/user.routes";
@@ -41,8 +41,8 @@ function createServer() {
       algorithm: "RS256",
     },
     cookie: {
-      cookieName: "token",
-      signed: false,
+      cookieName: COOKIE_NAME,
+      signed: SIGNED,
     },
   });
 

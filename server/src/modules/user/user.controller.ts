@@ -5,7 +5,7 @@ import {
   generateSalt,
 } from "./user.service";
 import { createVault, findVaultByUser } from "../vault/vault.service";
-import { COOKIE_DOMAIN, SECURE } from "../../constants";
+import { COOKIE_DOMAIN, HTTPONLY, SAMESITE, SECURE } from "../../constants";
 import logger from "../../utils/logger";
 
 /**
@@ -44,8 +44,8 @@ export async function registerUserHandler(
       domain: COOKIE_DOMAIN,
       path: "/",
       secure: SECURE,
-      httpOnly: true,
-      sameSite: false,
+      httpOnly: HTTPONLY,
+      sameSite: SAMESITE,
     });
 
     // Respond with a 201 status code and the access token, vault data, and salt.
@@ -93,8 +93,8 @@ export async function loginHandler(
     domain: COOKIE_DOMAIN,
     path: "/",
     secure: SECURE,
-    httpOnly: true,
-    sameSite: false,
+    httpOnly: HTTPONLY,
+    sameSite: SAMESITE,
   });
 
   // Respond with a 200 status code and the access token, vault data, and salt.

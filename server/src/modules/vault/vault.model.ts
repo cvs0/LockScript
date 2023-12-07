@@ -1,5 +1,6 @@
 import { getModelForClass, prop, Ref } from "@typegoose/typegoose";
 import { User } from "../user/user.model";
+import { VAULT_TIMESTAMPS } from "../../constants";
 
 // Define the Vault class, representing the structure of a vault document in the database.
 export class Vault {
@@ -19,7 +20,6 @@ export class Vault {
 // Create the VaultModel using the Vault class and additional schema options.
 export const VaultModel = getModelForClass(Vault, {
   schemaOptions: {
-    // Enable automatic timestamping for createdAt and updatedAt fields.
-    timestamps: true,
+    timestamps: VAULT_TIMESTAMPS,
   },
 });
