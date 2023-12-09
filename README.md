@@ -92,7 +92,7 @@ We welcome contributions from the community. If you'd like to enhance LockScript
 
 #### Version 2.0 (Upcoming Release)
 
-- Password generator.
+- ~~Password generator.~~
 - UI overhaul.
 - Improved mobile responsiveness.
 - Enhanced password strength analysis.
