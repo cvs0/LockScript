@@ -1,8 +1,7 @@
+import React, { useEffect, useState } from "react";
 import Head from "next/head";
-import Image from "next/image";
-import { Inter } from "next/font/google";
+
 import styles from "../styles/Home.module.css";
-import { useEffect, useState } from "react";
 import RegisterForm from "../components/RegisterForm";
 import LoginForm from "../components/LoginForm";
 import Vault from "../components/Vault";
@@ -24,7 +23,13 @@ function Home() {
     const vaultKey = window.sessionStorage.getItem("vk");
 
     if (vault) {
-      setVault(JSON.parse(vault));
+      try {
+        const parsedVault = JSON.parse(vault);
+        setVault(parsedVault);
+      } catch (error) {
+        console.error("Error parsing vault data:", error);
+      }
+      
     }
 
     if (vaultKey) {
@@ -38,7 +43,7 @@ function Home() {
       <Head>
         <title>{PAGE_TITLE}</title>
         <meta name="description" content={PAGE_DESCRIPTION} />
-        <link rel="icon" href="/favicone.ico" />
+        <link rel="icon" href="/client/src/public/favicone.ico" />
       </Head>
 
       <main className={styles.main}>
