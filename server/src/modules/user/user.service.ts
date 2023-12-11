@@ -70,7 +70,42 @@ export async function findUserByEmailAndPassword({
     return user;
   } catch (error) {
     console.error("Error finding user:", error);
-    
     throw new Error("Internal server error");
+  }
+}
+
+/**
+ * Updates the user's password.
+ * @param {string} userId - User ID.
+ * @param {string} newPassword - New password for the user.
+ * @returns {Promise<void>} - Promise resolving on successful password update.
+ */
+export async function updatePassword(
+  userId: string,
+  newPassword: string
+): Promise<void> {
+  const hashedPassword = await genHash(newPassword);
+  await UserModel.findByIdAndUpdate(userId, { password: hashedPassword });
+}
+
+/**
+ * Deletes a user by their ID.
+ * @param {string} userId - User ID.
+ * @returns {Promise<void>} - Promise resolving on successful user deletion.
+ * @throws {Error} - Throws an error if the user is not found or deletion fails.
+ */
+export async function deleteUserById(userId: string): Promise<void> {
+  try {
+    const user = await UserModel.findByIdAndDelete(userId);
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    // Additional cleanup or actions after deleting the user can be added here
+
+  } catch (error) {
+    console.error("Error deleting user:", error);
+    throw new Error("Failed to delete user");
   }
 }

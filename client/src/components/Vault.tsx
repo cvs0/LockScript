@@ -8,8 +8,10 @@ import {
   FaSignOutAlt,
   FaSync,
   FaTimes,
+  FaTrash,
   FaUser,
 } from "react-icons/fa";
+import * as jwt_decode from 'jwt-decode';
 import { useFieldArray, useForm } from "react-hook-form";
 import { VaultItem } from "../pages";
 import FormWrapper from "./FormWrapper";
@@ -45,13 +47,13 @@ import {
   SliderTrack,
   Stack,
   Switch,
-  TagRightIcon,
   useColorMode,
 } from "@chakra-ui/react";
 import { encryptVault } from "../crypto";
 import { useMutation } from "react-query";
 import { saveVault } from "../api";
 import { useEffect, useState } from "react";
+import { JwtPayload, jwtDecode } from "jwt-decode";
 
 interface CountryDropdownProps {
   onSelect: (selectedCountry: string) => void;
@@ -158,6 +160,7 @@ function Vault({
         password += charset.charAt(randomIndex);
       }
     }
+    
     setValue(`vault.${index}.password`, password);
 
     if (copyToClipboard) {
@@ -258,6 +261,49 @@ function Vault({
     toggleColorMode();
     saveSettingsToSessionStorage();
   };
+
+  const cookieString = document.cookie;
+  const tokenCookie = cookieString
+    .split('; ')
+    .find((cookie) => cookie.startsWith('token='));
+
+  // Extract the token value from the cookie
+  const token = tokenCookie ? tokenCookie.split('=')[1] : null;
+
+  // Log the retrieved token
+  console.log('Retrieved Token:', token);
+  let userid: string = '';
+  let email: string = '';
+
+  // Check if the token is present and is a string
+  if (!token || typeof token !== 'string') {
+    console.error("Invalid or missing token");
+    // Handle the case where the token is invalid or missing
+  } else {
+    try {
+      const decodedToken: any = jwtDecode(token);
+
+      console.log('Decoded Token:', decodedToken);
+
+      const userId = decodedToken?._id;
+      const userEmail = decodedToken?.email;
+
+      let userid = userId;
+      let email = userEmail;
+
+      console.log('userid: ', userid);
+      console.log('email: ', email);
+
+      if (!userId) {
+        console.error("Invalid user ID in token");
+      } else {
+        console.log("User ID:", userId);
+      }
+    } catch (error) {
+      console.error("Error decoding token:", error);
+    }
+  }
+
   return (
     <FormWrapper
       onSubmit={handleSubmit(({ vault }) => {
@@ -500,6 +546,22 @@ function Vault({
                   <CountryDropdown
                     onSelect={(selectedCountry) => setLocation(selectedCountry)}
                   />
+                </FormControl>
+              </div>
+            </Collapse>
+
+            <Collapse in={isSecurityOpen}>
+              <div>
+                <FormControl mb="4">
+                  <FormLabel htmlFor="deleteAccount">Delete Account</FormLabel>
+                  <Button
+                    leftIcon={<FaTrash />}
+                    onClick={() => (
+
+                    )}
+                  >
+                    Delete
+                  </Button>
                 </FormControl>
               </div>
             </Collapse>

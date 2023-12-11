@@ -16,6 +16,7 @@
     "crypto-js": "^4.2.0",
     "fastify-jwt": "^4.2.0",
     "framer-motion": "^6.5.1",
+    "jwt-decode": "^4.0.0",
     "next": "14.0.1",
     "react": "^18.2.0",
     "react-dom": "^18",
@@ -25,6 +26,7 @@
     "react-toast-notifications": "^2.5.1"
   },
   "devDependencies": {
+    "@types/jwt-decode": "^3.1.0",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

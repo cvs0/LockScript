@@ -50,3 +50,13 @@ export function saveVault({ encryptedVault }: { encryptedVault: string }) {
     .put(vaultBase, { encryptedVault }, { withCredentials: true })
     .then((res) => res.data);
 }
+
+export function deleteAccount(payload: { userId: string }) {
+  const { userId } = payload;
+
+  return axios
+    .delete(`${userBase}/delete/${userId}`, {
+      withCredentials: true,
+    })
+    .then((res) => res.data);
+}
