@@ -53,7 +53,7 @@ import { encryptVault } from "../crypto";
 import { useMutation } from "react-query";
 import { saveVault } from "../api";
 import { useEffect, useState } from "react";
-import { JwtPayload, jwtDecode } from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 
 interface CountryDropdownProps {
   onSelect: (selectedCountry: string) => void;
@@ -270,30 +270,27 @@ function Vault({
   // Extract the token value from the cookie
   const token = tokenCookie ? tokenCookie.split('=')[1] : null;
 
-  // Log the retrieved token
-  console.log('Retrieved Token:', token);
   let userid: string = '';
   let email: string = '';
 
-  // Check if the token is present and is a string
   if (!token || typeof token !== 'string') {
     console.error("Invalid or missing token");
     // Handle the case where the token is invalid or missing
   } else {
     try {
       const decodedToken: any = jwtDecode(token);
-
+  
       console.log('Decoded Token:', decodedToken);
-
+  
       const userId = decodedToken?._id;
       const userEmail = decodedToken?.email;
-
-      let userid = userId;
-      let email = userEmail;
-
+  
+      userid = userId || ''; // Assign directly to the existing variables
+      email = userEmail || ''; // Assign directly to the existing variables
+  
       console.log('userid: ', userid);
       console.log('email: ', email);
-
+  
       if (!userId) {
         console.error("Invalid user ID in token");
       } else {
@@ -546,20 +543,6 @@ function Vault({
                   <CountryDropdown
                     onSelect={(selectedCountry) => setLocation(selectedCountry)}
                   />
-                </FormControl>
-              </div>
-            </Collapse>
-
-            <Collapse in={isSecurityOpen}>
-              <div>
-                <FormControl mb="4">
-                  <FormLabel htmlFor="deleteAccount">Delete Account</FormLabel>
-                  <Button
-                    leftIcon={<FaTrash />}
-                    onClick={() => (console.log('hi'))}
-                  >
-                    Delete
-                  </Button>
                 </FormControl>
               </div>
             </Collapse>
