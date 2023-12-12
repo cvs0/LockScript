@@ -33,7 +33,6 @@ function createServer() {
   // Register JWT authentication plugin for handling JSON Web Tokens.
   app.register(jwt, {
     secret: {
-      // Read private and public keys from the 'certs' directory.
       private: fs.readFileSync(path.join(process.cwd(), "certs", "private.key")),
       public: fs.readFileSync(path.join(process.cwd(), "certs", "public.key")),
     },
@@ -45,6 +44,7 @@ function createServer() {
       signed: SIGNED,
     },
   });
+  
 
   // Register the Fastify cookie plugin for handling cookies.
   app.register(cookie, {

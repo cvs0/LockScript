@@ -556,9 +556,7 @@ function Vault({
                   <FormLabel htmlFor="deleteAccount">Delete Account</FormLabel>
                   <Button
                     leftIcon={<FaTrash />}
-                    onClick={() => (
-
-                    )}
+                    onClick={() => (console.log('hi'))}
                   >
                     Delete
                   </Button>
