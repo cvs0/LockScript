@@ -107,7 +107,7 @@ We encourage the community to share feedback and suggest features. Please open a
 A: Absolutely! LockScript is designed for both personal and professional use, providing a secure and user-friendly password management solution.
 
 #### Q: How do I set up LockScript?
-A: You need to regenerate the `public.key` and `private.key` using [this site](https://travistidwell.com/jsencrypt/demo/) and update all instances of the `secure: false` property in the `user.controller.ts` file to `secure: true` (only if you are using TLS).
+A: You need to regenerate the `public.key` and `private.key`, using [this site](https://travistidwell.com/jsencrypt/demo/) and update all instances of the `secure` property in the server config, (`constants.ts`). (only if you are using TLS).
 
 ## Media
 ![Login Page UI](media/login-page-ui.png)
