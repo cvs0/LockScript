@@ -1,14 +1,11 @@
 /* eslint-disable react/jsx-no-undef */
 import {
-  FaArrowAltCircleDown,
-  FaArrowCircleRight,
   FaCog,
   FaCopy,
   FaExternalLinkAlt,
   FaSignOutAlt,
   FaSync,
   FaTimes,
-  FaTrash,
   FaUser,
 } from "react-icons/fa";
 import * as jwt_decode from 'jwt-decode';
@@ -19,13 +16,11 @@ import {
   Avatar,
   Box,
   Button,
-  Collapse,
   Drawer,
   DrawerBody,
   DrawerContent,
   DrawerHeader,
   DrawerOverlay,
-  Flex,
   FormControl,
   FormLabel,
   Input,
@@ -48,58 +43,15 @@ import {
   Stack,
   Switch,
   useColorMode,
+  Text,
 } from "@chakra-ui/react";
 import { encryptVault } from "../crypto";
 import { useMutation } from "react-query";
 import { saveVault } from "../api";
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
-
-interface CountryDropdownProps {
-  onSelect: (selectedCountry: string) => void;
-}
-function CountryDropdown({ onSelect }: CountryDropdownProps) {
-  const [countries, setCountries] = useState<string[]>([]);
-  const [searchTerm] = useState<string>("");
-  useEffect(() => {
-    const fetchCountries = async () => {
-      try {
-        const response = await fetch("https://restcountries.com/v3.1/all");
-        const data = await response.json();
-        const countryList = data.map(
-          (country: {
-            name: {
-              common: string;
-            };
-          }) => country.name.common
-        );
-
-        setCountries(countryList);
-      } catch (error) {
-        console.error("Error fetching countries:", error);
-      }
-    };
-    fetchCountries();
-  }, []);
-  const filteredCountries = countries.filter((country) =>
-    country.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-  const sortedCountries = filteredCountries.sort();
-  return (
-    <Select
-      placeholder="Select a country"
-      onChange={(e) => onSelect(e.target.value)}
-    >
-      {" "}
-      {sortedCountries.map((country, index) => (
-        <option key={index} value={country}>
-          {" "}
-          {country}{" "}
-        </option>
-      ))}{" "}
-    </Select>
-  );
-}
+import SettingsSection from "./SettingsSection";
+import CountryDropdown from "./CountryDropdown";
 
 function Vault({
   vault = [],
@@ -428,127 +380,67 @@ function Vault({
         </Menu>
       </Box>
 
-      <Drawer
-        isOpen={isSettingsOpen}
-        onClose={() => setIsSettingsOpen(false)}
-        placement="right"
+      <Drawer isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} placement="right">
+  <DrawerOverlay />
+  <DrawerContent>
+    <DrawerHeader
+      borderBottomWidth="2px"
+      p="6"
+      fontSize="2xl"
+      fontWeight="extrabold"
+      color="white"
+      bgGradient="linear(to-r, teal.500, teal.300)"
+      boxShadow="md"
+      textAlign="center"
+    >
+      Settings
+    </DrawerHeader>
+
+    <DrawerBody>
+      {/* Appearance Section */}
+      <SettingsSection
+        title="Appearance"
+        isOpen={isAppearanceOpen}
+        onToggle={() => setIsAppearanceOpen(!isAppearanceOpen)}
       >
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerHeader
-            borderBottomWidth="2px"
-            p="6"
-            fontSize="2xl"
-            fontWeight="extrabold"
-            color="white"
-            bgGradient="linear(to-r, teal.500, teal.300)"
-            boxShadow="md"
-            textAlign="center"
-          >
-            Settings
-          </DrawerHeader>
+        <FormControl display="flex" alignItems="center" mb="4">
+          <FormLabel htmlFor="darkMode">Dark Mode</FormLabel>
+          <Switch id="darkMode" isChecked={colorMode === "dark"} onChange={handleDarkModeToggle} />
+        </FormControl>
+      </SettingsSection>
 
-          <DrawerBody>
-            {/* Appearance Section */}
-            <Flex align="center" justify="space-between" mb="2">
-              <Button
-                variant="link"
-                fontSize="lg"
-                fontWeight="bold"
-                onClick={() => setIsAppearanceOpen(!isAppearanceOpen)}
-                rightIcon={
-                  isAppearanceOpen ? (
-                    <FaArrowAltCircleDown />
-                  ) : (
-                    <FaArrowCircleRight />
-                  )
-                }
-              >
-                Appearance
-              </Button>
-            </Flex>
+      {/* Notification Section */}
+      <SettingsSection
+        title="Notifications"
+        isOpen={isNotificationOpen}
+        onToggle={() => setIsNotificationOpen(!isNotificationOpen)}
+      >
+        <FormControl display="flex" alignItems="center" mb="4">
+          <FormLabel htmlFor="notification">Notifications</FormLabel>
+          <Switch id="notification" isChecked={notification} onChange={() => setNotification(!notification)} />
+        </FormControl>
+      </SettingsSection>
 
-            <Collapse in={isAppearanceOpen}>
-              <div>
-                <FormControl display="flex" alignItems="center" mb="4">
-                  <FormLabel htmlFor="darkMode" mb="0">
-                    Dark Mode
-                  </FormLabel>
-                  <Switch
-                    id="darkMode"
-                    isChecked={colorMode === "dark"}
-                    onChange={handleDarkModeToggle}
-                  />
-                </FormControl>
-              </div>
-            </Collapse>
+      {/* Security Section */}
+      <SettingsSection
+        title="Security"
+        isOpen={isSecurityOpen}
+        onToggle={() => setIsSecurityOpen(!isSecurityOpen)}
+      >
+        <FormControl mb="4">
+          <FormLabel htmlFor="country">Country</FormLabel>
+          <CountryDropdown onSelect={(selectedCountry) => setLocation(selectedCountry)} />
+        </FormControl>
 
-            {/* Notification Section */}
-            <Flex align="center" justify="space-between" mb="2">
-              <Button
-                variant="link"
-                fontSize="lg"
-                fontWeight="bold"
-                onClick={() => setIsNotificationOpen(!isNotificationOpen)}
-                rightIcon={
-                  isNotificationOpen ? (
-                    <FaArrowAltCircleDown />
-                  ) : (
-                    <FaArrowCircleRight />
-                  )
-                }
-              >
-                Notifications
-              </Button>
-            </Flex>
+        <FormControl mb="4">
+          <FormLabel htmlFor="email">Email</FormLabel>
+          <Text>{email}</Text>
+        </FormControl>
+      </SettingsSection>
+    </DrawerBody>
+  </DrawerContent>
+</Drawer>;
 
-            <Collapse in={isNotificationOpen}>
-              <div>
-                <FormControl display="flex" alignItems="center" mb="4">
-                  <FormLabel htmlFor="notification" mb="0">
-                    Notifications
-                  </FormLabel>
-                  <Switch
-                    id="notification"
-                    isChecked={notification}
-                    onChange={() => setNotification(!notification)}
-                  />
-                </FormControl>
-              </div>
-            </Collapse>
-
-            {/* Security Section */}
-            <Flex align="center" justify="space-between" mb="2">
-              <Button
-                variant="link"
-                fontSize="lg"
-                fontWeight="bold"
-                onClick={() => setIsSecurityOpen(!isSecurityOpen)}
-                rightIcon={
-                  isSecurityOpen ? (
-                    <FaArrowAltCircleDown />
-                  ) : (
-                    <FaArrowCircleRight />
-                  )
-                }
-              >
-                Security
-              </Button>
-            </Flex>
-
-            <Collapse in={isSecurityOpen}>
-              <div>
-                <FormControl mb="4">
-                  <FormLabel htmlFor="country">Country</FormLabel>
-                  <CountryDropdown
-                    onSelect={(selectedCountry) => setLocation(selectedCountry)}
-                  />
-                </FormControl>
-              </div>
-            </Collapse>
-          </DrawerBody>
-        </DrawerContent>
-      </Drawer>
       {fields.map((field, index) => {
         return (
           <Box

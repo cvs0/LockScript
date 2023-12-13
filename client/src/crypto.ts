@@ -1,13 +1,26 @@
 import pbkdf2 from "crypto-js/pbkdf2";
-import { AES, SHA256, enc } from "crypto-js";
+import { AES, enc } from "crypto-js";
+import * as bcrypt from 'bcrypt';
+import { promisify } from 'util';
+
+const hashAsync = promisify(bcrypt.hash);
+
+const saltRounds = 15;
 
 /**
- * Hashes the provided password using SHA-256.
+ * Hashes a password using bcrypt with enhanced security settings.
  * @param {string} password - The password to be hashed.
- * @returns {string} - The hashed password.
+ * @returns {Promise<string>} - A promise that resolves to the hashed password.
+ * @throws {Error} - Throws an error if the hashing process fails.
  */
-export function hashPassword(password: string) {
-  return SHA256(password).toString();
+export async function hashPassword(password: string): Promise<string> {
+  try {
+    const hashedPassword = await hashAsync(password, saltRounds);
+    return hashedPassword;
+  } catch (error) {
+    // Handle hash failure
+    throw new Error('Error hashing password');
+  }
 }
 
 /**
