@@ -1,27 +1,13 @@
 import pbkdf2 from "crypto-js/pbkdf2";
-import { AES, enc, lib } from "crypto-js";
-import * as bcrypt from 'bcrypt';
-import { promisify } from 'util';
-import * as crypto from 'crypto';
-
-const hashAsync = promisify(bcrypt.hash);
-
-const saltRounds = 15;
+import { AES, SHA256, enc } from "crypto-js";
 
 /**
- * Hashes a password using bcrypt with enhanced security settings.
+ * Hashes the provided password using SHA-256.
  * @param {string} password - The password to be hashed.
- * @returns {Promise<string>} - A promise that resolves to the hashed password.
- * @throws {Error} - Throws an error if the hashing process fails.
+ * @returns {string} - The hashed password.
  */
-export async function hashPassword(password: string): Promise<string> {
-  try {
-    const hashedPassword = await hashAsync(password, saltRounds);
-    return hashedPassword;
-  } catch (error) {
-    // Handle hash failure
-    throw new Error('Error hashing password');
-  }
+export function hashPassword(password: string) {
+  return SHA256(password).toString();
 }
 
 /**
@@ -41,13 +27,7 @@ export function generateVaultKey({
   hashedPassword: string;
   salt: string;
 }) {
-  const keySize = 32;
-  const iterations = 10000;
-
-  const keyBuffer = crypto.pbkdf2Sync(`${email}:${hashedPassword}`, salt, iterations, keySize, 'sha512');
-  const key = enc.Hex.parse(keyBuffer.toString('hex'));
-
-  return pbkdf2(key, salt, {
+  return pbkdf2(`${email}:${hashedPassword}`, salt, {
     keySize: 32,
   }).toString();
 }
@@ -66,23 +46,18 @@ export function decryptVault({
   vaultKey: string;
   vault: string;
 }) {
-  const hexIv = vault.substr(0, 32);
-  const cipherText = vault.substr(32);
-
-  const bytes = AES.decrypt(cipherText, vaultKey, {
-    iv: lib.WordArray.create(Buffer.from(hexIv, 'hex') as any),
-    format: 'hex' as any,
-  });
-
+  // Decrypt the vault using the vault key.
+  const bytes = AES.decrypt(vault, vaultKey);
   const decrypted = bytes.toString(enc.Utf8);
 
+  // Attempt to parse the decrypted data as JSON and extract the 'vault' property.
   try {
     return JSON.parse(decrypted).vault;
   } catch (e) {
+    // Return null if parsing fails.
     return null;
   }
 }
-
 
 /**
  * Encrypts the vault using the provided vault key.
@@ -98,13 +73,6 @@ export function encryptVault({
   vaultKey: string;
   vault: string;
 }) {
-  const iv = enc.Hex.parse(crypto.randomBytes(16).toString('hex'));
-  const cipherParams = AES.encrypt(vault, vaultKey, { iv });
-  
-  if (!cipherParams) {
-    throw new Error('Encryption failed');
-  }
-
-  const encryptedText = enc.Hex.stringify(iv) + cipherParams.ciphertext.toString(enc.Hex);
-  return encryptedText;
+  // Encrypt the vault using the vault key.
+  return AES.encrypt(vault, vaultKey).toString();
 }

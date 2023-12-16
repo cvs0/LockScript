@@ -439,7 +439,7 @@ function Vault({
       </SettingsSection>
     </DrawerBody>
   </DrawerContent>
-</Drawer>;
+</Drawer>
 
       {fields.map((field, index) => {
         return (

@@ -54,23 +54,25 @@ function RegisterForm({
   };
 
   const mutation = useMutation(registerUser, {
-    onSuccess: ({ salt, vault }) => {
+    onSuccess: async ({ salt, vault }) => {
       const hashedPassword = getValues("hashedPassword");
       const email = getValues("email");
+      const actualSalt = await salt;
       const vaultKey = generateVaultKey({
         hashedPassword,
         email,
-        salt,
+        salt: actualSalt,
       });
-
+    
       window.sessionStorage.setItem("vk", vaultKey);
-
+    
       setVaultKey(vaultKey);
-
+    
       window.sessionStorage.setItem("vault", "");
-
+    
       setStep("vault");
     },
+    
 
     onError: (error: any) => {
       const errorMessage =
