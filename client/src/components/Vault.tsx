@@ -381,65 +381,65 @@ function Vault({
       </Box>
 
       <Drawer isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} placement="right">
-  <DrawerOverlay />
-  <DrawerContent>
-    <DrawerHeader
-      borderBottomWidth="2px"
-      p="6"
-      fontSize="2xl"
-      fontWeight="extrabold"
-      color="white"
-      bgGradient="linear(to-r, teal.500, teal.300)"
-      boxShadow="md"
-      textAlign="center"
-    >
-      Settings
-    </DrawerHeader>
+        <DrawerOverlay />
+        <DrawerContent>
+          <DrawerHeader
+            borderBottomWidth="2px"
+            p="6"
+            fontSize="2xl"
+            fontWeight="extrabold"
+            color="white"
+            bgGradient="linear(to-r, teal.500, teal.300)"
+            boxShadow="md"
+            textAlign="center"
+          >
+            Settings
+          </DrawerHeader>
 
-    <DrawerBody>
-      {/* Appearance Section */}
-      <SettingsSection
-        title="Appearance"
-        isOpen={isAppearanceOpen}
-        onToggle={() => setIsAppearanceOpen(!isAppearanceOpen)}
-      >
-        <FormControl display="flex" alignItems="center" mb="4">
-          <FormLabel htmlFor="darkMode">Dark Mode</FormLabel>
-          <Switch id="darkMode" isChecked={colorMode === "dark"} onChange={handleDarkModeToggle} />
-        </FormControl>
-      </SettingsSection>
+          <DrawerBody>
+            {/* Appearance Section */}
+            <SettingsSection
+              title="Appearance"
+              isOpen={isAppearanceOpen}
+              onToggle={() => setIsAppearanceOpen(!isAppearanceOpen)}
+            >
+              <FormControl display="flex" alignItems="center" mb="4">
+                <FormLabel htmlFor="darkMode">Dark Mode</FormLabel>
+                <Switch id="darkMode" isChecked={colorMode === "dark"} onChange={handleDarkModeToggle} />
+              </FormControl>
+            </SettingsSection>
 
-      {/* Notification Section */}
-      <SettingsSection
-        title="Notifications"
-        isOpen={isNotificationOpen}
-        onToggle={() => setIsNotificationOpen(!isNotificationOpen)}
-      >
-        <FormControl display="flex" alignItems="center" mb="4">
-          <FormLabel htmlFor="notification">Notifications</FormLabel>
-          <Switch id="notification" isChecked={notification} onChange={() => setNotification(!notification)} />
-        </FormControl>
-      </SettingsSection>
+            {/* Notification Section */}
+            <SettingsSection
+              title="Notifications"
+              isOpen={isNotificationOpen}
+              onToggle={() => setIsNotificationOpen(!isNotificationOpen)}
+            >
+              <FormControl display="flex" alignItems="center" mb="4">
+                <FormLabel htmlFor="notification">Notifications</FormLabel>
+                <Switch id="notification" isChecked={notification} onChange={() => setNotification(!notification)} />
+              </FormControl>
+            </SettingsSection>
 
-      {/* Security Section */}
-      <SettingsSection
-        title="Security"
-        isOpen={isSecurityOpen}
-        onToggle={() => setIsSecurityOpen(!isSecurityOpen)}
-      >
-        <FormControl mb="4">
-          <FormLabel htmlFor="country">Country</FormLabel>
-          <CountryDropdown onSelect={(selectedCountry) => setLocation(selectedCountry)} />
-        </FormControl>
+            {/* Security Section */}
+            <SettingsSection
+              title="Security"
+              isOpen={isSecurityOpen}
+              onToggle={() => setIsSecurityOpen(!isSecurityOpen)}
+            >
+              <FormControl mb="4">
+                <FormLabel htmlFor="country">Country</FormLabel>
+                <CountryDropdown onSelect={(selectedCountry) => setLocation(selectedCountry)} />
+              </FormControl>
 
-        <FormControl mb="4">
-          <FormLabel htmlFor="email">Email</FormLabel>
-          <Text>{email}</Text>
-        </FormControl>
-      </SettingsSection>
-    </DrawerBody>
-  </DrawerContent>
-</Drawer>
+              <FormControl mb="4">
+                <FormLabel htmlFor="email">Email</FormLabel>
+                <Text>{email}</Text>
+              </FormControl>
+            </SettingsSection>
+          </DrawerBody>
+        </DrawerContent>
+      </Drawer>
 
       {fields.map((field, index) => {
         return (
