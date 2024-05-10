@@ -90,12 +90,23 @@ We welcome contributions from the community. If you'd like to enhance LockScript
 
 ## Roadmap
 
-#### Version 2.0 (Upcoming Release)
+#### Version 2.1 (Upcoming Release)
 
-- ~~Password generator.~~
-- ~~UI overhaul.~~
-- Improved mobile responsiveness.
-- Enhanced password strength analysis.
+- Fully featured landing page.
+- Fully redone client using NextJS 14 + Tailwind CSS
+- Updating all dependencies and addressing all security concerns
+
+#### Version 2.2
+- Fully redone auth with Clerk (with OAuth integration)
+
+#### Version 2.3
+- Full security blog
+
+#### Version 2.3.1
+- All open bugs will be patched in this release.
+
+#### Version 2.3.2
+- Small patches
 
 #### How to Contribute to the Roadmap
 
