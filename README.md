@@ -108,6 +108,9 @@ We welcome contributions from the community. If you'd like to enhance LockScript
 #### Version 2.3.2
 - Small patches
 
+#### Version 2.4
+- Adding LockScript Drive, a secure end-to-ene encrypted focument storage system.
+
 #### How to Contribute to the Roadmap
 
 We encourage the community to share feedback and suggest features. Please open an issue to propose new ideas or upvote existing issues to help prioritize development efforts.
